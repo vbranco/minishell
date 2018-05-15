@@ -10,4 +10,14 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+typedef struct	s_inf
+{
+	char		*pwd;
+	char		*oldpwd;
+	char		*home;
+	char		*path;
+}				t_inf;
+
+void			ft_initialise(t_inf *env);
+
 #endif
