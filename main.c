@@ -28,8 +28,9 @@ void	name(char *path, char *line)
 int		main(int ac, char **av, char **env)
 {
 	t_inf	info;
-	int		i = 0;
 
+	(void)ac;
+	(void)av;
 	ft_initialise(&info);
 	ft_getenv(&info, env);
 
