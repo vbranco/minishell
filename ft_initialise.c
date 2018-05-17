@@ -8,4 +8,6 @@ void	ft_initialise(t_inf *env)
 	env->oldpwd = NULL;
 	env->home = NULL;
 	env->path = NULL;
+	env->user = NULL;
+	env->lastcmd = NULL;
 }
