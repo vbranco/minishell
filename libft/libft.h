@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2017/11/23 16:46:53 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2017/11/28 19:01:48 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/05/19 16:38:25 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "ft_printf/ft_printf.h"
+# include "get_next_line.h"
 
 typedef struct		s_list
 {

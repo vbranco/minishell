@@ -1,54 +1,35 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   main.c                                           .::    .:/ .      .::   */
+/*   get_next_line.h                                  .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/19 16:27:47 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Created: 2017/12/02 14:23:12 by vbranco      #+#   ##    ##    #+#       */
+/*   Updated: 2018/05/19 16:38:52 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "mini.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-void	name(char *path, char *line)
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/fcntl.h>
+# include <unistd.h>
+# include "libft.h"
+# define BUFF_SIZE 10000
+
+typedef struct		s_buf
 {
-	while (*line)
-	{
-		*path = *line;
-		path++;
-		line++;
-	}
-	*(path) = '\0';
-}
+	int				call;
+	char			*tmp;
+	int				indice;
+	int				start;
+	int				fide;
+}					t_buf;
 
-int		main(int ac, char **av, char **env)
-{
-	t_inf	info;
-	pid_t	f;
-	int		i;
+int					get_next_line(const int fd, char **line);
 
-	f = fork();
-	i = 0;
-	(void)ac;
-//	(void)av;
-	ft_initialise(&info);
-	ft_getenv(&info, env);
-	if (f > 0)
-	{
-		while (i < 3)
-		{
-			ft_printf("$> ");
-			wait(NULL);
-			i++;
-		}
-	}
-	else
-	{
-		execve("/bin/ls", av, env);
-	}
-	return  (0);
-}
+#endif
