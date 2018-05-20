@@ -23,17 +23,14 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-typedef struct	s_inf
+typedef struct		s_env
 {
-	char		*pwd;
-	char		*oldpwd;
-	char		*home;
-	char		*path;
-	char		*user;
-	char		*lastcmd;
-}				t_inf;
+	char			*name;
+	char			*data;
+	struct s_env	*next;
+}					t_env;
 
-void			ft_initialise(t_inf *env);
-void			ft_getenv(t_inf *info, char **env);
+t_env			*ft_initialise(void);
+t_env			*ft_get_env(char **env);
 
 #endif

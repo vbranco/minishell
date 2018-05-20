@@ -49,12 +49,11 @@ void	minishell(void)
 
 int		main(int ac, char **av, char **env)
 {
-	t_inf	info;
+	t_env	*info;
 
 	(void)ac;
 	(void)av;
-	ft_initialise(&info);
-	ft_getenv(&info, env);
+	info = ft_get_env(env);
 	minishell();
 	return (0);
 }

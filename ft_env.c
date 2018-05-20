@@ -49,13 +49,4 @@ void    ft_getenv(t_inf *info, char **env)
 			info->lastcmd = ft_strsub(env[i], 2, ft_strlen(env[i]) - 2);
 		i++;
 	}
-/*
-	printf("pwd >> %s\n", info->pwd);
-	printf("oldpwd >> %s\n", info->oldpwd);
-	printf("home >> %s\n", info->home);
-	printf("path >> %s\n", info->path);
-	printf("user >> %s\n", info->user);
-	printf("lastcmd >> %s\n", info->lastcmd);
-*/
 }
-
