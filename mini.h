@@ -14,14 +14,14 @@
 #ifndef MINI_H
 # define MINI_H
 
-#include "libft/libft.h"
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <signal.h>
+# include "libft/libft.h"
+# include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <dirent.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
+# include <signal.h>
 
 typedef struct		s_env
 {
@@ -32,5 +32,6 @@ typedef struct		s_env
 
 t_env			*ft_initialise(void);
 t_env			*ft_get_env(char **env);
+void			ft_dell(t_env **s);
 
 #endif

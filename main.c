@@ -54,6 +54,7 @@ int		main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	info = ft_get_env(env);
-	minishell();
+	ft_dell(&info);
+//	minishell();
 	return (0);
 }

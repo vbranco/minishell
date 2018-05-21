@@ -45,7 +45,7 @@ fclean: clean
 		@rm -f $(NAME)
 #		@$(MAKE) -C $(L_FT) fclean
 
-re:		all#enlever
+re:		fclean all#enlever
 		@echo "\033[32m RE minishell"
 #		@$(MAKE) fclean
 #		@$(MAKE) all

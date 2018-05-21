@@ -33,15 +33,27 @@ t_env		*ft_get(char *s1, int i)
 	t_env	*new;
 
 	new = ft_initialise();
+	if (new == NULL)
+		return (NULL);
 	new->name = ft_strsub(s1, 0, i);
 	new->data = ft_strsub(s1, i + 1, ft_strlen(s1) - (i + 1));
+//	ft_printf("%s = %s\n", new->name, new->data);
 	return (new);
 }
 
 void		ft_add(t_env **s, t_env *new)
 {
-	new->next = *s;
-	*s = new;
+	t_env	*tmp;
+
+	tmp = *s;
+	if (tmp)
+	{
+		while (tmp)
+			tmp = tmp->next;
+	}
+	new->next = tmp;
+	tmp = new;
+	*s = tmp;
 }
 
 void		ft_dell(t_env **s)
@@ -76,8 +88,9 @@ t_env		*ft_get_env(char **env)
 			new = ft_get(*env, 4);
 		if (test(*env, "USER", 4))
 			new = ft_get(*env, 4);
-		if (test(*env, "_", 1))
+		if (test(*env, "_=", 2))
 			new = ft_get(*env, 1);
+//		ft_printf("%s = %s\n", new->name, new->data);
 		ft_add(&s, new);
 		env++;
 	}
