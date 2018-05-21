@@ -1,77 +1,79 @@
-/* ************************************************************************** */
-/*                                                          LE - /            */
-/*                                                              /             */
-/*   get_next_line.c                                  .::    .:/ .      .::   */
-/*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
-/*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2017/12/02 16:49:59 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/19 17:48:02 by vbranco     ###    #+. /#+    ###.fr     */
-/*                                                         /                  */
-/*                                                        /                   */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-static void	ft_clean_static(t_buf *valeur)
+static int				getch(t_list *cur)
 {
-	valeur->call = 0;
-	valeur->tmp = NULL;
-	valeur->indice = 0;
-	valeur->start = 0;
+	if (((t_getch*)(cur->content))->n == 0)
+	{
+		((t_getch*)cur->content)->bufp = ((t_getch*)cur->content)->buf;
+		((t_getch*)cur->content)->n = read(((t_getch*)cur->content)->fd,
+			((t_getch*)cur->content)->buf, BUFF_SIZE);
+		if (((t_getch*)cur->content)->n == -1)
+			return (-2);
+	}
+	return ((--((t_getch*)cur->content)->n >= 0) ?
+			(unsigned char)*((t_getch*)cur->content)->bufp++ : EOF);
 }
-/*
-static char	*ft_realloc(char *s1, char *s2)
-{
-	char	*tmp;
 
-	if (!s1 || !s2)
+static t_getch				*set_getch(const int fd)
+{
+	t_getch	*getch;
+
+	if (!(getch = (t_getch*)malloc(sizeof(*getch))))
 		return (NULL);
-	tmp = ft_strjoin(s1, s2);
-	free(s1);
-	return (tmp);
+	getch->fd = fd;
+	getch->n = 0;
+	getch->bufp = getch->buf;
+	return (getch);
 }
-*/
-static int	ft_test(t_buf *valeur)
+
+static t_list				*tog_lst(t_list **lst, const int fd)
 {
-	if (valeur->indice == 0)
-		valeur->start = 0;
-	else
+	t_list	*cur;
+	t_getch *track;
+
+	cur = *lst;
+	if (*lst == NULL)
 	{
-		if (valeur->tmp[valeur->indice] == '\0')
-			return (0);
-		valeur->start = valeur->indice + 1;
-		valeur->indice++;
+		track = set_getch(fd);
+		*lst = ft_lstnew(track, sizeof(t_getch));
+		free(track);
+		return (*lst);
 	}
-	if (valeur->tmp[valeur->indice] == '\0')
-		return (0);
-	return (1);
+	while (cur)
+	{
+		if (((t_getch*)(cur->content))->fd == fd)
+			return (cur);
+		cur = cur->next;
+	}
+	track = set_getch(fd);
+	ft_lstadd(lst, ft_lstnew(track, sizeof(t_getch)));
+	free(track);
+	return (*lst);
 }
 
-int			get_next_line(const int fd, char **line)
+int					get_next_line(const int fd, char **line)
 {
-	static t_buf	valeur;
-	char			buf[BUFF_SIZE + 1];
-	int				ret;
+	char			*s;
+	char			c;
+	static t_list	*lst = NULL;
+	t_list			*cur;
+	size_t			i;
 
-	if (fd < 0 || line == NULL || (read(fd, buf, 0) == -1))
+	if (fd < 0 || BUFF_SIZE < 1 || line == NULL || read(fd, NULL, 0) < 0)
 		return (-1);
-	(valeur.fide = 0 || valeur.fide != fd) ? ft_clean_static(&valeur) : 0;
-	if (valeur.indice == 0)
+	if (((s = ft_strnew(BUFF_SIZE)) == NULL))
+		return (-1);
+	cur = tog_lst(&lst, fd);
+	i = 0;
+	while ((c = getch(cur)) != '\n' && c != EOF)
 	{
-		valeur.tmp = ft_strnew(BUFF_SIZE);
-		while ((ret = read(fd, buf, BUFF_SIZE)))
-		{
-			buf[ret] = '\0';
-			valeur.tmp = ft_realloc(valeur.tmp, buf);
-		}
+		if (c == -2)
+			return (-1);
+		if (i % BUFF_SIZE == 0 && (s = ft_strexpand(&s, BUFF_SIZE)) == NULL)
+			return (-1);
+		s[i++] = c;
 	}
-	if (ft_test(&valeur) == 0)
-		return (0);
-	while (valeur.tmp[valeur.indice] != '\n' && valeur.tmp[valeur.indice])
-		valeur.indice++;
-	(*line) = ft_strsub(valeur.tmp, valeur.start, (valeur.indice
-				- valeur.start));
-	valeur.fide = fd;
-	return (1);
+	s[i] = '\0';
+	*line = s;
+	return ((i > 0 || (i == 0 && c == '\n')) ? 1 : 0);
 }

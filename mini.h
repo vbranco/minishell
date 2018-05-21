@@ -30,8 +30,25 @@ typedef struct		s_env
 	struct s_env	*next;
 }					t_env;
 
+/*
+**	ENV >> ft_initialise.c
+*/
 t_env			*ft_initialise(void);
 t_env			*ft_get_env(char **env);
 void			ft_dell(t_env **s);
+
+/*
+**	DEBUG---------------------------------
+*/
+void			afficher_env(t_env *s);
+//------------------------------------------
+
+/*
+**	BUILTINS
+*/
+void			echo(char **parsed);
+/*
+**
+*/
 
 #endif

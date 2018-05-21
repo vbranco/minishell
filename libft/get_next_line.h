@@ -1,35 +1,25 @@
-/* ************************************************************************** */
-/*                                                          LE - /            */
-/*                                                              /             */
-/*   get_next_line.h                                  .::    .:/ .      .::   */
-/*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
-/*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2017/12/02 14:23:12 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/19 16:38:52 by vbranco     ###    #+. /#+    ###.fr     */
-/*                                                         /                  */
-/*                                                        /                   */
-/* ************************************************************************** */
+#	ifndef GET_NEXT_LINE_H
+#	define GET_NEXT_LINE_H
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include "libft.h"
 
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <sys/fcntl.h>
-# include <unistd.h>
-# include "libft.h"
-# define BUFF_SIZE 10000
+#define EOF (-1)
+#define BUFF_SIZE 4096
 
-typedef struct		s_buf
+typedef	struct	s_getch
 {
-	int				call;
-	char			*tmp;
-	int				indice;
-	int				start;
-	int				fide;
-}					t_buf;
+	int			fd;
+	int			n;
+	char		buf[BUFF_SIZE];
+	char		*bufp;
+}				t_getch;
 
-int					get_next_line(const int fd, char **line);
+int				get_next_line(const int fd, char **line);
+//t_getch			*set_getch(const int fd);
+//t_list			*tog_lst(t_list **lst, const int fd);
 
-#endif
+#	endif

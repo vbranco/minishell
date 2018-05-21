@@ -13,34 +13,6 @@ t_env		*ft_initialise(void)
 	return (env);
 }
 
-static int  test(char *str, char *search, int i)
-{
-	char        tmp;
-
-	tmp = str[i];
-	str[i] = '\0';
-	if (ft_strcmp(str, search) == 0)
-	{
-		str[i] = tmp;
-		return (1);
-	}
-	str[i] = tmp;
-	return (0);
-}
-
-t_env		*ft_get(char *s1, int i)
-{
-	t_env	*new;
-
-	new = ft_initialise();
-	if (new == NULL)
-		return (NULL);
-	new->name = ft_strsub(s1, 0, i);
-	new->data = ft_strsub(s1, i + 1, ft_strlen(s1) - (i + 1));
-//	ft_printf("%s = %s\n", new->name, new->data);
-	return (new);
-}
-
 void		ft_add(t_env **s, t_env *new)
 {
 	t_env	*tmp;
@@ -48,12 +20,16 @@ void		ft_add(t_env **s, t_env *new)
 	tmp = *s;
 	if (tmp)
 	{
-		while (tmp)
+		while (tmp->next)
 			tmp = tmp->next;
+		tmp->next = new;
+		new->next = NULL;
 	}
-	new->next = tmp;
-	tmp = new;
-	*s = tmp;
+	else
+	{
+		new->next = *s;
+		*s = new;
+	}
 }
 
 void		ft_dell(t_env **s)
@@ -68,31 +44,36 @@ void		ft_dell(t_env **s)
 		free(*s);
 		(*s) = tmp;
 	}
+	*s = NULL;
+}
+
+void		ft_get(t_env **s, char *s1, int i)
+{
+	t_env	*new;
+
+	new = ft_initialise();
+	if (new == NULL)
+		return ;
+	new->name = ft_strsub(s1, 0, i);
+	new->data = ft_strsub(s1, i + 1, ft_strlen(s1) - (i + 1));
+	ft_add(s, new);
 }
 
 t_env		*ft_get_env(char **env)
 {
 	t_env	*s;
-	t_env	*new;
+	int		i;
+	int		a;
 
 	s = NULL;
-	while (*env != NULL)
+	i = 0;
+	while (env[i])
 	{
-		if (test(*env, "PWD", 3))
-			new = ft_get(*env, 3);
-		if (test(*env, "OLDPWD", 6))
-			new = ft_get(*env, 6);
-		if (test(*env, "HOME", 4))
-			new = ft_get(*env, 4);
-		if (test(*env, "PATH", 4))
-			new = ft_get(*env, 4);
-		if (test(*env, "USER", 4))
-			new = ft_get(*env, 4);
-		if (test(*env, "_=", 2))
-			new = ft_get(*env, 1);
-//		ft_printf("%s = %s\n", new->name, new->data);
-		ft_add(&s, new);
-		env++;
+		a = 0;
+		while (env[i][a] && env[i][a] != '=')
+			a++;
+		ft_get(&s, env[i], a);	
+		i++;
 	}
 	return (s);
 }

@@ -14,37 +14,53 @@
 #include <stdio.h>
 #include "mini.h"
 
-void	execute(char *line)
+void	execute(t_env *env, char **parsed)
 {
-	(void)line;
-	pid_t	pid;
+	if (ft_strcmp(*parsed, "env") == 0)
+		afficher_env(env);
+	if (ft_strcmp(*parsed, "echo") == 0)
+		echo(parsed);
+/*	pid_t	pid;
 
-	ft_printf("%s\n", line);
 	pid = fork();
 	if (pid < 0)
 		ft_printf("ERROR FORK()\n");
 	if (pid == 0)
-		execve("/bin/ls", NULL, NULL);
+		execve(parsed[0], parsed, NULL);
 	else
-	wait(&pid);
-	return ;
+		wait(&pid);
+*/	return ;
 }
 
-void	minishell(void)
+void	minishell(t_env *env)
 {
 	char	*line;
-	int		ret;
-//	char	*av[] = {"ls", "-l", NULL};
+	char	**parsed;
 
+	line = NULL;
+	parsed = NULL;
 	while (101)
 	{
 		ft_printf("$> ");
-		if ((ret = get_next_line(STDIN_FILENO, &line)) == 0)
-			break;
-		ft_printf("ici");
-		ft_printf("%s", line);
-		execute(line);
+		if (line != NULL)
+		{
+			free(line);
+			line = NULL;
+		}
+		if (parsed != NULL)
+		{
+			ft_free_2char(parsed);
+			parsed = NULL;
+		}
+		get_next_line(0, &line);
+		if (ft_strcmp(line, "exit") == 0)
+			break ;
+		parsed = ft_strsplit(line, ' ');
+		execute(env, parsed);
 	}
+	free(line);
+	if (parsed)
+		ft_free_2char(parsed);
 }
 
 int		main(int ac, char **av, char **env)
@@ -54,7 +70,8 @@ int		main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	info = ft_get_env(env);
+//	afficher_env(info);
+	minishell(info);
 	ft_dell(&info);
-//	minishell();
 	return (0);
 }

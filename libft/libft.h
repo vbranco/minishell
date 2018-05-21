@@ -118,4 +118,6 @@ int					ft_count_words(char const *s, char c);
 */
 
 char				*ft_realloc(char *s1, char *s2);
+char				*ft_strexpand(char **str, size_t size);
+void				ft_free_2char(char **s);
 #endif
