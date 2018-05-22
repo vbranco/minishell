@@ -10,6 +10,7 @@ t_env		*ft_initialise(void)
 	env->name = NULL;
 	env->data = NULL;
 	env->next = NULL;
+	env->prev = NULL;
 	return (env);
 }
 
@@ -24,10 +25,12 @@ void		ft_add(t_env **s, t_env *new)
 			tmp = tmp->next;
 		tmp->next = new;
 		new->next = NULL;
+		new->prev = tmp;
 	}
 	else
 	{
 		new->next = *s;
+		new->prev = *s;
 		*s = new;
 	}
 }

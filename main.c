@@ -16,11 +16,16 @@
 
 void	execute(t_env *env, char **parsed)
 {
+	if (*parsed == NULL)
+		return ;
 	if (ft_strcmp(*parsed, "env") == 0)
 		afficher_env(env);
 	if (ft_strcmp(*parsed, "echo") == 0)
 		echo(parsed);
-/*	pid_t	pid;
+	if (ft_strcmp(*parsed, "cd") == 0)
+		cd(env, parsed);
+	
+	pid_t	pid;
 
 	pid = fork();
 	if (pid < 0)
@@ -29,7 +34,7 @@ void	execute(t_env *env, char **parsed)
 		execve(parsed[0], parsed, NULL);
 	else
 		wait(&pid);
-*/	return ;
+	return ;
 }
 
 void	minishell(t_env *env)
