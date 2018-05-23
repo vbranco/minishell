@@ -96,17 +96,17 @@ int		change_dir(t_env *env, char **parsed, char *pwd)
 
 	if (parsed[1] == NULL || (ft_strcmp(parsed[1], "~") == 0))
 	{
-		ft_printf("ici >> HOME\n");
+//		ft_printf("ici >> HOME\n");
 		change_home(env);
 	}
 	else if (ft_strcmp(parsed[1], "-") == 0)
 	{
-		ft_printf("ici >> OLDPWD\n");
+//		ft_printf("ici >> OLDPWD\n");
 		change_oldpwd(env);
 	}
 	else
 	{
-		ft_printf("ici >> others\n");
+//		ft_printf("ici >> others\n");
 		if (parsed[1][0] != '/')
 		{
 			dir = ft_realloc(pwd, "/");
@@ -121,7 +121,7 @@ int		change_dir(t_env *env, char **parsed, char *pwd)
 			free(dir);
 			return (1);
 		}
-		change_pwd_oldpwd(env, dir);
+//		change_pwd_oldpwd(env, dir);
 		free(dir);
 	}
 	return (0);

@@ -15,7 +15,7 @@ NAME		=	minishell
 
 HEADER		=	mini.h
 
-FILENAMES	=	main.c ft_initialise.c builtins.c builtin_cd.c \
+FILENAMES	=	main.c ft_initialise.c builtins.c builtin_cd.c parsing.c\
 		debug.c
 
 SOURCES		=	$(addprefix ./, $(FILENAMES))

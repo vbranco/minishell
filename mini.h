@@ -63,8 +63,10 @@ void			change_home(t_env *env);
 void			change_oldpwd(t_env *env);
 void			change_pwd_oldpwd(t_env *env, char *pwd);
 void			update_env(t_env **env, char *pwd);
+
 /*
-**
+**	PARSING.c
 */
+char			**ft_split(char *line);
 
 #endif

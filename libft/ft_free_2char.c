@@ -5,10 +5,14 @@ void	ft_free_2char(char **s)
 	size_t	i;
 
 	i = 0;
-	while (s[i])
+	if (s[i])
 	{
-		free(s[i]);
-		i++;
+		while (s[i])
+		{
+			free(s[i]);
+			i++;
+		}
 	}
-	free(s[i]);
+	free(s);
+	s = NULL;
 }
