@@ -15,7 +15,8 @@ NAME		=	minishell
 
 HEADER		=	mini.h
 
-FILENAMES	=	main.c ft_initialise.c builtins.c builtin_cd.c builtin_cd2.c builtin_env.c builtin_setenv.c parsing.c\
+FILENAMES	=	main.c ft_initialise.c builtins.c builtin_cd.c builtin_cd2.c builtin_env.c builtin_setenv.c builtin_unsetenv.c parsing.c\
+	exe.c
 
 SOURCES		=	$(addprefix ./, $(FILENAMES))
 
@@ -29,7 +30,7 @@ LIB_LNK		=	-L $(L_FT) -l ft
 
 LIB_INC		=	-I $(L_FT)/libft.h
 
-FLAGS		=	-Wall -Wextra -Werror -g
+LAGS		=	-Wall -Wextra -Werror -g
 
 .PHONY: all clean fclean re
 

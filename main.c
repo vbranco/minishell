@@ -18,15 +18,19 @@ void	execute(t_env *env, char **parsed)
 {
 	pid_t	pid;
 
-	(void)env;
-	pid = fork();
-	if (pid < 0)
-		ft_printf("ERROR FORK()\n");
-	if (pid == 0)
-		execve(parsed[0], parsed, NULL);
+	if (test_exe(env, parsed))
+	{
+		pid = fork();
+		if (pid < 0)
+			ft_printf("ERROR FORK()\n");
+		if (pid == 0)
+			execve(parsed[0], parsed, NULL);
+		else
+			wait(&pid);
+		return ;
+	}
 	else
-		wait(&pid);
-	return ;
+		return ;
 }
 
 int		built(t_env *envi, char **parsed)
@@ -40,9 +44,9 @@ int		built(t_env *envi, char **parsed)
 	if (ft_strcmp(*parsed, "cd") == 0)
 		return (cd(envi, parsed));
 	if (ft_strcmp(*parsed, "setenv") == 0)
-		return (setenvi(&envi, parsed));
-//	if (ft_strcmp(*parsed, "unsetenv") == 0)
-//		return (unsetenvi(envi, parsed));
+		return (setenvi(envi, parsed));
+	if (ft_strcmp(*parsed, "unsetenv") == 0)
+		return (unsetenvi(envi, parsed));
 	return (0);
 }
 /*
@@ -60,7 +64,7 @@ void	ft_free_line_parsed(char **line, char ***parsed)
 	}
 }
 */
-void	minishell(t_env *env)
+void	minishell(t_env **env)
 {
 	char	*line;
 	char	**parsed;
@@ -95,8 +99,8 @@ void	minishell(t_env *env)
 		if (ft_strcmp(line, "exit") == 0)
 			break ;
 		parsed = ft_split(line);
-		if (built(env, parsed) == 0)
-			execute(env, parsed);
+		if (built(*env, parsed) == 0)
+			execute(*env, parsed);
 	}
 	if (line)
 		free(line);
@@ -113,7 +117,7 @@ int		main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	info = ft_get_env(env);
-	minishell(info);
+	minishell(&info);
 	ft_dell(&info);
 	return (0);
 }

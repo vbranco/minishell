@@ -29,6 +29,8 @@
 # define CD_NO_DIR "cd: not a directory: "
 # define CD_DENIED "cd: permission denied: "
 # define CD_NOT_PWD "cd: string not in pwd: "
+# define ENV_VAR "setenv: Variable name must contain alphanumeric characters"
+# define UNSETENV_NO_ARG "unsetenv: not enough arguments"
 
 typedef struct		s_env
 {
@@ -44,6 +46,7 @@ typedef struct		s_env
 t_env			*ft_initialise(void);
 t_env			*ft_get_env(char **env);
 void			ft_dell(t_env **s);
+void			ft_add(t_env **s, t_env *new);
 
 /*
 **	DEBUG---------------------------------
@@ -78,12 +81,17 @@ void			update_env(t_env *env, char *pwd);
 /*
 **	BUILTIN_SETENV.c
 */
-int				setenvi(t_env **env, char **parsed);
+int				setenvi(t_env *env, char **parsed);
 
 /*
 **	BUILTIN_UNSETENV.c
 */
-//int				unsetenvi(t_env *env, char **parsed);
+int				unsetenvi(t_env *env, char **parsed);
+
+/*
+**	EXE.c
+*/
+int				test_exe(t_env *env, char **parsed);
 
 /*
 **	PARSING.c
