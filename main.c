@@ -29,25 +29,16 @@ void	execute(t_env *env, char **parsed)
 	return ;
 }
 
-int		built(t_env *env, char **parsed)
+int		built(t_env *envi, char **parsed)
 {
 	if (*parsed == NULL)
 		return (1);
 	if (ft_strcmp(*parsed, "env") == 0)
-	{
-		afficher_env(env);
-		return (1);
-	}
+		return (env(envi));
 	if (ft_strcmp(*parsed, "echo") == 0)
-	{
-		echo(parsed);
-		return (1);
-	}
+		return (echo(parsed));
 	if (ft_strcmp(*parsed, "cd") == 0)
-	{
-		cd(env, parsed);
-		return (1);
-	}
+		return (cd(envi, parsed));
 	return (0);
 }
 /*
@@ -85,9 +76,9 @@ void	minishell(t_env *env)
 		}
 		if (parsed != NULL)
 		{
-//			ft_free_2char(parsed);
-//			parsed = NULL;
-			while (parsed[i])
+			ft_free_2char(parsed);
+			parsed = NULL;
+/*			while (parsed[i])
 			{
 				free(parsed[i]);
 				i++;
@@ -95,7 +86,7 @@ void	minishell(t_env *env)
 			free(parsed);
 //			ft_free_2char(&parsed);
 			parsed = NULL;
-		}
+*/		}
 		get_next_line(0, &line);
 		if (ft_strcmp(line, "exit") == 0)
 			break ;

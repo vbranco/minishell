@@ -28,6 +28,7 @@
 # define CD_BAD_FD "cd: bad file descriptor: "
 # define CD_NO_DIR "cd: not a directory: "
 # define CD_DENIED "cd: permission denied: "
+# define CD_NOT_PWD "cd: string not in pwd: "
 
 typedef struct		s_env
 {
@@ -47,22 +48,26 @@ void			ft_dell(t_env **s);
 /*
 **	DEBUG---------------------------------
 */
-void			afficher_env(t_env *s);
 //------------------------------------------
 
 /*
-**	BUILTINS
+**	BUILTINS.c
 */
-void			echo(char **parsed);
+int				echo(char **parsed);
+
 /*
 **	BUILTIN_CD.c
 */
 int				cd(t_env *env, char **parsed);
-int				change_dir(t_env *env, char **parsed, char *pwd);
-void			change_home(t_env *env);
-void			change_oldpwd(t_env *env);
-void			change_pwd_oldpwd(t_env *env, char *pwd);
-void			update_env(t_env **env, char *pwd);
+int				change_dir(t_env *env, char *dir);
+char			*get_dir_from_env(t_env *env, char *looking);
+int				ft_error(char *error_message, char **parsed, int index);
+
+/*
+**	BUILTIN_ENV.c
+*/
+int				env(t_env *s);
+void			update_env(t_env *env, char *pwd);
 
 /*
 **	PARSING.c

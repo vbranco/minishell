@@ -1,6 +1,6 @@
 #include "mini.h"
 
-void	echo(char **parsed)
+int			echo(char **parsed)
 {
 	int		flag;
 	int		i;
@@ -23,4 +23,5 @@ void	echo(char **parsed)
 	}
 	if (!flag)
 		ft_printf("\n");
+	return (1);
 }

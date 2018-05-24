@@ -1,152 +1,139 @@
 #include "mini.h"
 
-void	update_env(t_env **env, char *pwd)
+char		*get_dir_from_env(t_env *env, char *looking)
 {
 	t_env	*tmp;
-	t_env	*up;
-
-	ft_printf("\n\ndebug  ||  pwd >> %s\n\n",pwd);
-	tmp = *env;
-	up = ft_initialise();
-	tmp->prev->next = up;
-	up->name = ft_strdup("PWD");
-	up->data = ft_strdup(pwd);
-	up->next = tmp->next;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->name, "OLDPWD") == 0)
-		{
-			tmp->prev->next = *env;
-			(*env)->next = tmp->next;
-			free((*env)->name);
-			(*env)->name = ft_strdup("OLDPWD");
-			free(tmp->name);
-			free(tmp->data);
-			tmp->next = NULL;
-			tmp->prev = NULL;
-			free(tmp);
-			break ;
-		}
-		tmp = tmp->next;
-	}
-}
-
-void	change_pwd_oldpwd(t_env *env, char *pwd)
-{
-	t_env	*tmp;
+	char	*dir;
 
 	tmp = env;
+	dir = NULL;
 	while (tmp)
 	{
-		if (ft_strcmp(tmp->name, "PWD") == 0)
-		{
-			update_env(&tmp, pwd); 
-			break ;
-		}
+		if (ft_strcmp(tmp->name, looking) == 0)
+			dir = ft_strdup(tmp->data);
 		tmp = tmp->next;
 	}
+	return (dir);
 }
 
-void	change_home(t_env *env)
+int		change_dir(t_env *env, char *dir)
 {
-	t_env	*tmp;
-	char	*buf;
-
-	tmp = env;
-	buf = NULL;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->name, "HOME") == 0)
-		{
-			chdir(tmp->data);
-			buf = getcwd(buf, 10000);
-			change_pwd_oldpwd(env, buf);
-			break ;
-		}
-		tmp = tmp->next;
-	}
-	free(buf);
+	if ((chdir(dir)) == -1)
+		return (ft_error(CD_NO_FILE, &dir, 0));
+	update_env(env, dir);
+	return (0);
 }
 
-void	change_oldpwd(t_env *env)
+char		*get_prev_dir(char **parsed, char *pwd)
 {
-	t_env	*tmp;
+	char	*dir;
+	int		i;
+	int		a;
+	int		z;
 
-	tmp = env;
-	while (tmp)
+	i = 0;
+	a = 0;
+	z = 0;
+	dir = NULL;
+	while (parsed[1][i] && parsed[1][i] == '.')
+		i++;
+	if (i >= 7)
+		return (NULL);
+	i--;
+	if (i == 0)
+		return (pwd);
+	while (pwd[a])
 	{
-		if (ft_strcmp(tmp->name, "OLDPWD") == 0)
-		{
-			if ((chdir(tmp->data)) != 0)
-			{
-				ft_printf("\n\nProbleme avec chdir dans change_oldpwd\n\n");
-				break ;
-			}
-			ft_printf("%s\n", tmp->data);
-			change_pwd_oldpwd(env, tmp->data);
-			break ;
-		}
-		tmp = tmp->next;
+		if (pwd[a] == '/')
+			z++;
+		a++;
 	}
-}
-
-int		change_dir(t_env *env, char **parsed, char *pwd)
-{
-	char		*dir;
-
-	if (parsed[1] == NULL || (ft_strcmp(parsed[1], "~") == 0))
-	{
-//		ft_printf("ici >> HOME\n");
-		change_home(env);
-	}
-	else if (ft_strcmp(parsed[1], "-") == 0)
-	{
-//		ft_printf("ici >> OLDPWD\n");
-		change_oldpwd(env);
-	}
+	if (i >= z)
+		return (ft_strdup("/"));//attention fuite de memoire
 	else
 	{
-//		ft_printf("ici >> others\n");
-		if (parsed[1][0] != '/')
+		a = ft_strlen(pwd) - 1;
+		while (a >= 0)
 		{
-			dir = ft_realloc(pwd, "/");
-			dir = ft_realloc(pwd, parsed[1]); 
+			if (pwd[a] == '/')
+			{
+				i--;
+				if (i == 0)
+				{
+					dir = ft_strsub(pwd, 0, a);
+					break ;
+				}
+			}
+			a--;
 		}
-		else //if (parsed[1][0] == '/')
-			dir = ft_strdup(parsed[1]);
-		if ((chdir(dir)) == -1)
-		{
-			ft_putstr_fd(CD_NO_FILE, 2);
-			ft_putendl_fd(dir, 2);
-			free(dir);
-			return (1);
-		}
-//		change_pwd_oldpwd(env, dir);
-		free(dir);
 	}
-	return (0);
+	return (dir);
+}
+
+char		*get_dir_from_parsed(char **parsed, char *pwd)
+{
+	char	*dir;
+
+	dir = NULL;
+	if (parsed[1][0] != '/')
+	{
+		dir = ft_strdup(pwd);
+		dir = ft_realloc(dir, "/");
+		dir = ft_realloc(dir, parsed[1]);
+	}
+	else
+		dir = ft_strdup(parsed[1]);
+	return (dir);
+}
+
+char		*ft_get_dir(t_env *env, char **parsed, char *pwd)
+{
+	char	*dir;
+
+	if (parsed[1] == NULL || (ft_strcmp(parsed[1], "~") == 0))
+		return (dir = get_dir_from_env(env, "HOME"));
+	else if (ft_strcmp(parsed[1], "-") == 0)
+		return (dir = get_dir_from_env(env, "OLDPWD"));
+	else if (parsed[1][0] == '.')
+		return (dir = get_prev_dir(parsed, pwd));
+	else
+		return (dir = get_dir_from_parsed(parsed, pwd));
+	return (dir);
+}
+
+int		ft_error(char *error_message, char **parsed, int index)
+{
+
+	ft_putstr_fd(error_message, 2);
+	if (parsed != NULL)
+		ft_putendl_fd(parsed[index], 2);
+	else
+		ft_putchar_fd('\n', 2);
+	return (1);
 }
 
 int		cd(t_env *env, char **parsed)
 {
 	char	*pwd;
 	int		args;
+	char	*dir;
 
+	dir = NULL;
 	args = 0;
 	pwd = NULL;
 	while (parsed[args])
 		args++;
 	if (args > 3)
-	{
-		ft_putendl_fd(CD_TOO_ARGS, 2);
-		return (-1);
-	}
+		return (ft_error(CD_TOO_ARGS, NULL, 0));
 	pwd = getcwd(pwd, 10000);
-	if (change_dir(env, parsed, pwd))
-	{
-		free(pwd);
-		return (-1);
-	}
-	free(pwd);
-	return (0);
+	if (parsed[1] != NULL && parsed[2] != NULL)
+		ft_error(CD_NOT_PWD, parsed, 1);//pas finalise, pas bonne erreur
+	else
+		dir = ft_get_dir(env, parsed, pwd);
+	if (dir == NULL)
+		return (ft_error(CD_NO_FILE, parsed, 1));
+	change_dir(env, dir);
+	(pwd != NULL) ? free(pwd) : 0;
+	(dir != NULL) ? free(dir) : 0;
+	return (1);
 }
