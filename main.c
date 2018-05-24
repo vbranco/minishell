@@ -34,11 +34,15 @@ int		built(t_env *envi, char **parsed)
 	if (*parsed == NULL)
 		return (1);
 	if (ft_strcmp(*parsed, "env") == 0)
-		return (env(envi));
+		return (environment(envi));
 	if (ft_strcmp(*parsed, "echo") == 0)
 		return (echo(parsed));
 	if (ft_strcmp(*parsed, "cd") == 0)
 		return (cd(envi, parsed));
+	if (ft_strcmp(*parsed, "setenv") == 0)
+		return (setenvi(&envi, parsed));
+//	if (ft_strcmp(*parsed, "unsetenv") == 0)
+//		return (unsetenvi(envi, parsed));
 	return (0);
 }
 /*
@@ -76,7 +80,7 @@ void	minishell(t_env *env)
 		}
 		if (parsed != NULL)
 		{
-			ft_free_2char(parsed);
+			ft_free_2char(parsed);//j'ai des fuites memoire ici
 			parsed = NULL;
 /*			while (parsed[i])
 			{

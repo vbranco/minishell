@@ -1,6 +1,6 @@
 #include "mini.h"
 
-int			env(t_env *s)
+int			environment(t_env *s)
 {
 	while (s)
 	{
@@ -20,8 +20,7 @@ void	update_env(t_env *env, char *pwd)
 	t_env	*tmp;
 	char	*datatmp;
 
-	ft_printf("\n\ndebug  ||  pwd >> %s\n\n",pwd);
-	tmp = env;//debut;
+	tmp = env;
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->name, "PWD") == 0)

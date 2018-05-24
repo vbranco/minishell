@@ -59,15 +59,31 @@ int				echo(char **parsed);
 **	BUILTIN_CD.c
 */
 int				cd(t_env *env, char **parsed);
-int				change_dir(t_env *env, char *dir);
+int				change_dir(t_env *env, char **parsed, char *dir);
 char			*get_dir_from_env(t_env *env, char *looking);
+
+/*
+**	BUILTIN_CD2.c
+*/
 int				ft_error(char *error_message, char **parsed, int index);
+
+char			*get_prev_dir(char **parsed, char *pwd);
 
 /*
 **	BUILTIN_ENV.c
 */
-int				env(t_env *s);
+int				environment(t_env *s);
 void			update_env(t_env *env, char *pwd);
+
+/*
+**	BUILTIN_SETENV.c
+*/
+int				setenvi(t_env **env, char **parsed);
+
+/*
+**	BUILTIN_UNSETENV.c
+*/
+//int				unsetenvi(t_env *env, char **parsed);
 
 /*
 **	PARSING.c
