@@ -31,6 +31,7 @@
 # define CD_NOT_PWD "cd: string not in pwd: "
 # define ENV_VAR "setenv: Variable name must contain alphanumeric characters"
 # define UNSETENV_NO_ARG "unsetenv: not enough arguments"
+# define NO_CMD ": Command not found"
 
 typedef struct		s_env
 {
@@ -91,7 +92,7 @@ int				unsetenvi(t_env *env, char **parsed);
 /*
 **	EXE.c
 */
-int				test_exe(t_env *env, char **parsed);
+int				test_exe(t_env *env, char **parsed, char **exe);
 
 /*
 **	PARSING.c

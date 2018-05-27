@@ -17,20 +17,27 @@
 void	execute(t_env *env, char **parsed)
 {
 	pid_t	pid;
-
-	if (test_exe(env, parsed))
+	char	*exe;
+	
+	exe = NULL;
+	if (test_exe(env, parsed, &exe))
 	{
 		pid = fork();
 		if (pid < 0)
-			ft_printf("ERROR FORK()\n");
+			ft_putendl_fd("ERROR FORK()", 2);
 		if (pid == 0)
-			execve(parsed[0], parsed, NULL);
+			execve(exe, parsed, NULL);
 		else
 			wait(&pid);
+		free(exe);
 		return ;
 	}
 	else
+	{
+		ft_putstr_fd(*parsed, 2);
+		ft_putendl_fd(NO_CMD, 2);
 		return ;
+	}
 }
 
 int		built(t_env *envi, char **parsed)
