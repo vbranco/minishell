@@ -1,9 +1,29 @@
 #include "mini.h"
 
-int			echo(char **parsed)
+static void		print_env(t_env *env, char *s)
 {
-	int		flag;
-	int		i;
+	t_env		*tmp;
+	char		*try;
+
+	try = ft_strdup(s+1);
+	tmp = env;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->name, try) == 0)
+		{
+			ft_printf("%s", tmp->data);
+			free(try);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	free(try);
+}
+
+int				echo(t_env *env, char **parsed)
+{
+	int			flag;
+	int			i;
 
 	flag = 0;
 	if (*(parsed + 1))
@@ -16,7 +36,10 @@ int			echo(char **parsed)
 		i++;
 	while (parsed[i])
 	{
-		ft_printf("%s", parsed[i]);
+		if (parsed[i][0] == '$')
+			print_env(env, parsed[i]);
+		else
+			ft_printf("%s", parsed[i]);
 		i++;
 		if (parsed[i])
 			ft_printf(" ");

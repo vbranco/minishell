@@ -6,12 +6,11 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/19 18:33:39 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/05/28 20:10:38 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "mini.h"
 
 void	execute(t_env *env, char **parsed)
@@ -47,7 +46,7 @@ int		built(t_env *envi, char **parsed)
 	if (ft_strcmp(*parsed, "env") == 0)
 		return (environment(envi));
 	if (ft_strcmp(*parsed, "echo") == 0)
-		return (echo(parsed));
+		return (echo(envi, parsed));
 	if (ft_strcmp(*parsed, "cd") == 0)
 		return (cd(envi, parsed));
 	if (ft_strcmp(*parsed, "setenv") == 0)
@@ -56,21 +55,7 @@ int		built(t_env *envi, char **parsed)
 		return (unsetenvi(envi, parsed));
 	return (0);
 }
-/*
-void	ft_free_line_parsed(char **line, char ***parsed)
-{
-	if (*line != NULL)
-	{
-		free(*line);
-		*line = NULL;
-	}
-	if (*parsed != NULL)//pas trop sur de cette methode
-	{
-		ft_free_2char(parsed);
-		*parsed = NULL;
-	}
-}
-*/
+
 void	minishell(t_env **env)
 {
 	char	*line;
@@ -93,15 +78,7 @@ void	minishell(t_env **env)
 		{
 			ft_free_2char(parsed);//j'ai des fuites memoire ici
 			parsed = NULL;
-/*			while (parsed[i])
-			{
-				free(parsed[i]);
-				i++;
-			}
-			free(parsed);
-//			ft_free_2char(&parsed);
-			parsed = NULL;
-*/		}
+		}
 		get_next_line(0, &line);
 		if (ft_strcmp(line, "exit") == 0)
 			break ;

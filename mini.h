@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:17 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/19 17:22:05 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/05/28 18:06:48 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -57,7 +57,7 @@ void			ft_add(t_env **s, t_env *new);
 /*
 **	BUILTINS.c
 */
-int				echo(char **parsed);
+int				echo(t_env *env, char **parsed);
 
 /*
 **	BUILTIN_CD.c
