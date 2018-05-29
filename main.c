@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/28 20:10:38 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/05/29 16:20:03 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,7 +25,7 @@ void	execute(t_env *env, char **parsed)
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
 		if (pid == 0)
-			execve(exe, parsed, NULL);
+			execve(exe, parsed, NULL);//char ** pour envoyer en env a la place de NULL
 		else
 			wait(&pid);
 		free(exe);

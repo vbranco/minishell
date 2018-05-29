@@ -1,6 +1,6 @@
 #include "mini.h"
 
-int		ft_error(char *error_message, char **parsed, int index)
+int				ft_error(char *error_message, char **parsed, int index)
 {
 
 	ft_putstr_fd(error_message, 2);
@@ -11,10 +11,10 @@ int		ft_error(char *error_message, char **parsed, int index)
 	return (1);
 }
 
-static int	ft_count_signes(char *str, char c)
+static	int		ft_count_signes(char *str, char c)
 {
-	int		i;
-	int		a;
+	int			i;
+	int			a;
 
 	i = 0;
 	a = 0;
@@ -22,15 +22,41 @@ static int	ft_count_signes(char *str, char c)
 	{
 		if (str[i] == c)
 			a++;
+		if (c == '.' && str[i] == '/' && a >= 0)
+			a--;
 		i++;
 	}
 	return (a);
 }
 
-static char	*ft_new_dir(char *pwd, int nb)
+static	void	ft_upgrade_dir(char *parsed, char *pwd, char **dir)
 {
-	int		len;
-	char	*dir;
+	char		*tmp;
+
+	tmp = ft_strdup(*dir);
+	free(*dir);
+	
+	free(tmp);
+}
+
+static	int		ft_path(char *s)
+{
+	int			i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '/' && s[i + 1] != '\0')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+static	char	*ft_new_dir(char *parsed, char *pwd, int nb)
+{
+	int			len;
+	char		*dir;
 
 	dir = NULL;
 	len = ft_strlen(pwd) - 1;
@@ -47,20 +73,21 @@ static char	*ft_new_dir(char *pwd, int nb)
 		}
 		len--;
 	}
+	if (ft_path(parsed))
+		ft_upgrade_dir(parsed, pwd, &dir);
 	return (dir);
 }
 
-char		*get_prev_dir(char **parsed, char *pwd)
+char			*get_prev_dir(char **parsed, char *pwd)
 {
-	char	*dir;
-	int		i;
-	int		z;
+	char		*dir;
+	int			i;
+	int			z;
+	int			a;
 
-	i = 0;
+	i = ft_count_signes(parsed[1], '.');
 	z = ft_count_signes(pwd, '/');
 	dir = NULL;
-	while (parsed[1][i] && parsed[1][i] == '.')
-		i++;
 	if (i >= 7)
 		return (NULL);
 	i--;
@@ -69,6 +96,6 @@ char		*get_prev_dir(char **parsed, char *pwd)
 	if (i >= z)
 		return (ft_strdup("/"));//attention fuite de memoire
 	else
-		dir = ft_new_dir(pwd, i);
+		dir = ft_new_dir(parsed[1], pwd, i);
 	return (dir);
 }

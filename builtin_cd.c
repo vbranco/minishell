@@ -51,7 +51,7 @@ char		*ft_get_dir(t_env *env, char **parsed, char *pwd)
 	else if (ft_strcmp(parsed[1], "-") == 0)
 		return (dir = get_dir_from_env(env, "OLDPWD"));
 	else if (parsed[1][0] == '.')
-		return (dir = get_prev_dir(parsed, pwd));
+		return (dir = get_prev_dir(parsed, pwd));//prob sur cd ../dossier
 	else
 		return (dir = get_dir_from_parsed(parsed, pwd));
 	return (dir);
@@ -63,6 +63,7 @@ int		cd(t_env *env, char **parsed)
 	int		args;
 	char	*dir;
 
+//probleme sur un cd ../dossier !!!!
 	dir = NULL;
 	args = 0;
 	pwd = NULL;

@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/28 19:46:28 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/28 20:10:37 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/05/29 19:17:11 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -93,19 +93,41 @@ static	int			ft_counter(char *s)
 	return (a);
 }
 
-/*
- * ** fonction qui recuper /bin/ls qui separe le /bin du ls et qui devra tester s'il existe
-*/
-
-
-static	int			try_exe_without_path(char *path, char *exe)
+static	int			try_exe_without_path(char *path, char **exe)
 {
 	char			*tmp;
 	int				slach;
 
 	slach = ft_counter(path);
-	tmp = ft_strsub(path, 0, slach - 1);
+	tmp = ft_strsub(path, 0, slach);
+	if (inside_dir(tmp, path, exe))
+	{
+		free (tmp);
+		return (1);
+	}
 	free(tmp);
+	return (0);
+}
+
+static	int			ft_count_p(char *s)
+{
+	return (0);
+}
+
+static	int			exec_in_dir(char **parsed, char **exe)
+{
+	char			*pwd;
+	int				p;
+
+	if (*parsed[0] == '.')
+	{
+		p = ft_count_p(*parsed);
+		ft_printf("ici\n");
+		pwd = getcwd(pwd, 10000);
+		ft_printf("pwd >> %s\n", pwd);
+		free(pwd);
+		return (1);
+	}
 	return (0);
 }
 
@@ -116,6 +138,8 @@ int					test_exe(t_env *env, char **parsed, char **exe)
 	int				i;
 
 	i = 0;
+	if (exec_in_dir(parsed, exe))
+		return (1);
 	tmp = path_exist(env);
 	path = ft_strsplit(tmp, ':');
 	free(tmp);
