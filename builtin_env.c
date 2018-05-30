@@ -30,6 +30,7 @@ void	update_env(t_env *env, char *pwd)
 	datatmp = ft_strdup(tmp->data);
 	free(tmp->data);
 	tmp->data = ft_strdup(pwd);
+	tmp = env;
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->name, "OLDPWD") == 0)

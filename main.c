@@ -21,11 +21,12 @@ void	execute(t_env *env, char **parsed)
 	exe = NULL;
 	if (test_exe(env, parsed, &exe))
 	{
+//		ft_printf("dans execute\n");
 		pid = fork();
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
 		if (pid == 0)
-			execve(exe, parsed, NULL);//char ** pour envoyer en env a la place de NULL
+			execve(exe, parsed, NULL);//char ** pour envoyer en env a la place de NULL || penser a gere le '~' EX: ls ~
 		else
 			wait(&pid);
 		free(exe);

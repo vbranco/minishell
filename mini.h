@@ -71,7 +71,7 @@ char			*get_dir_from_env(t_env *env, char *looking);
 */
 int				ft_error(char *error_message, char **parsed, int index);
 
-char			*get_prev_dir(char **parsed, char *pwd);
+char			*get_prev_dir(char **parsed, char *pwd, int index);
 
 /*
 **	BUILTIN_ENV.c

@@ -21,7 +21,10 @@ char		*get_dir_from_env(t_env *env, char *looking)
 int		change_dir(t_env *env, char **parsed, char *dir)
 {
 	if ((chdir(dir)) == -1)
+	{
+		//chercher si permission denied ou dossier inexistant ou fichier
 		return (ft_error(CD_NO_FILE, parsed, 1));
+	}
 	update_env(env, dir);
 	return (0);
 }
@@ -51,7 +54,7 @@ char		*ft_get_dir(t_env *env, char **parsed, char *pwd)
 	else if (ft_strcmp(parsed[1], "-") == 0)
 		return (dir = get_dir_from_env(env, "OLDPWD"));
 	else if (parsed[1][0] == '.')
-		return (dir = get_prev_dir(parsed, pwd));//prob sur cd ../dossier
+		return (dir = get_prev_dir(parsed, pwd, 1));
 	else
 		return (dir = get_dir_from_parsed(parsed, pwd));
 	return (dir);
@@ -63,7 +66,6 @@ int		cd(t_env *env, char **parsed)
 	int		args;
 	char	*dir;
 
-//probleme sur un cd ../dossier !!!!
 	dir = NULL;
 	args = 0;
 	pwd = NULL;
@@ -72,11 +74,11 @@ int		cd(t_env *env, char **parsed)
 	if (args > 3)
 		return (ft_error(CD_TOO_ARGS, NULL, 0));
 	pwd = getcwd(pwd, 10000);
+	(pwd != NULL) ? free(pwd) : 0;
 	dir = ft_get_dir(env, parsed, pwd);
 	if (dir == NULL)
 		return (ft_error(CD_NO_FILE, parsed, 1));
 	change_dir(env, parsed, dir);
-	(pwd != NULL) ? free(pwd) : 0;
-	(dir != NULL) ? free(dir) : 0;
+	(ft_strcmp(dir, pwd)) ? free(dir) : 0;
 	return (1);
 }

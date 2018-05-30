@@ -109,23 +109,17 @@ static	int			try_exe_without_path(char *path, char **exe)
 	return (0);
 }
 
-static	int			ft_count_p(char *s)
-{
-	return (0);
-}
-
 static	int			exec_in_dir(char **parsed, char **exe)
 {
 	char			*pwd;
-	int				p;
 
+	pwd = NULL;
 	if (*parsed[0] == '.')
 	{
-		p = ft_count_p(*parsed);
-		ft_printf("ici\n");
 		pwd = getcwd(pwd, 10000);
-		ft_printf("pwd >> %s\n", pwd);
-		free(pwd);
+		*exe = get_prev_dir(parsed, pwd, 0);
+		if (pwd != NULL)
+			free(pwd);
 		return (1);
 	}
 	return (0);
