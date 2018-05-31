@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/29 16:20:03 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/05/31 20:14:19 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,7 +17,7 @@ void	execute(t_env *env, char **parsed)
 {
 	pid_t	pid;
 	char	*exe;
-	
+
 	exe = NULL;
 	if (test_exe(env, parsed, &exe))
 	{
@@ -28,8 +28,10 @@ void	execute(t_env *env, char **parsed)
 		if (pid == 0)
 			execve(exe, parsed, NULL);//char ** pour envoyer en env a la place de NULL || penser a gere le '~' EX: ls ~
 		else
+		{
 			wait(&pid);
-		free(exe);
+			free(exe);
+		}
 		return ;
 	}
 	else
@@ -69,7 +71,6 @@ void	minishell(t_env **env)
 	{
 		i = 0;
 		ft_printf("$> ");
-//		ft_free_line_parsed(&line, &parsed);
 		if (line != NULL)
 		{
 			free(line);
@@ -77,7 +78,7 @@ void	minishell(t_env **env)
 		}
 		if (parsed != NULL)
 		{
-			ft_free_2char(parsed);//j'ai des fuites memoire ici
+			ft_free_2char(&parsed);
 			parsed = NULL;
 		}
 		get_next_line(0, &line);
@@ -90,9 +91,7 @@ void	minishell(t_env **env)
 	if (line)
 		free(line);
 	if (parsed != NULL)
-	{
-		ft_free_2char(parsed);
-	}
+		ft_free_2char(&parsed);
 }
 
 int		main(int ac, char **av, char **env)

@@ -35,7 +35,6 @@ static	void	ft_upgrade_dir(char *parsed, char *pwd, char **dir)
 
 	tmp = ft_strdup(*dir);
 	free(*dir);
-	
 	free(tmp);
 }
 

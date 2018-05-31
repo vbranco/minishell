@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:17 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/29 16:40:20 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/05/31 19:56:04 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -63,8 +63,6 @@ int				echo(t_env *env, char **parsed);
 **	BUILTIN_CD.c
 */
 int				cd(t_env *env, char **parsed);
-int				change_dir(t_env *env, char **parsed, char *dir);
-char			*get_dir_from_env(t_env *env, char *looking);
 
 /*
 **	BUILTIN_CD2.c

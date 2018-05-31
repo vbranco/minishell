@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2017/11/23 16:46:53 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/19 16:38:25 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/05/31 16:25:43 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -119,5 +119,5 @@ int					ft_count_words(char const *s, char c);
 
 char				*ft_realloc(char *s1, char *s2);
 char				*ft_strexpand(char **str, size_t size);
-void				ft_free_2char(char **s);
+void				ft_free_2char(char ***s);
 #endif

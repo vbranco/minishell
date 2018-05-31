@@ -1,9 +1,9 @@
 #include "mini.h"
 
-char		*get_dir_from_env(t_env *env, char *looking)
+static char		*get_dir_from_env(t_env *env, char *looking)
 {
-	t_env	*tmp;
-	char	*dir;
+	t_env		*tmp;
+	char		*dir;
 
 	tmp = env;
 	dir = NULL;
@@ -18,63 +18,43 @@ char		*get_dir_from_env(t_env *env, char *looking)
 	return (dir);
 }
 
-int		change_dir(t_env *env, char **parsed, char *dir)
+static	int		change_dir(t_env *env, char **parsed, char *dir)
 {
-	if ((chdir(dir)) == -1)
-	{
-		//chercher si permission denied ou dossier inexistant ou fichier
+	if (access(dir, F_OK))
 		return (ft_error(CD_NO_FILE, parsed, 1));
-	}
+	else if (access(dir, X_OK))
+		return (ft_error(CD_DENIED, parsed, 1));
+	if ((chdir(dir)) == -1)
+		return (ft_error("CHDIR: cannot open: ", parsed, 1));
 	update_env(env, dir);
 	return (0);
 }
 
-char		*get_dir_from_parsed(char **parsed, char *pwd)
+char			*ft_get_dir(t_env *env, char **parsed, char *pwd)
 {
-	char	*dir;
-
-	dir = NULL;
-	if (parsed[1][0] != '/')
-	{
-		dir = ft_strdup(pwd);
-		dir = ft_realloc(dir, "/");
-		dir = ft_realloc(dir, parsed[1]);
-	}
-	else
-		dir = ft_strdup(parsed[1]);
-	return (dir);
-}
-
-char		*ft_get_dir(t_env *env, char **parsed, char *pwd)
-{
-	char	*dir;
+	char		*dir;
 
 	if (parsed[1] == NULL || (ft_strcmp(parsed[1], "~") == 0))
 		return (dir = get_dir_from_env(env, "HOME"));
 	else if (ft_strcmp(parsed[1], "-") == 0)
 		return (dir = get_dir_from_env(env, "OLDPWD"));
-	else if (parsed[1][0] == '.')
-		return (dir = get_prev_dir(parsed, pwd, 1));
 	else
-		return (dir = get_dir_from_parsed(parsed, pwd));
-	return (dir);
+		return (dir = ft_strdup(parsed[1]));
 }
 
-int		cd(t_env *env, char **parsed)
+int				cd(t_env *env, char **parsed)
 {
-	char	*pwd;
-	int		args;
-	char	*dir;
+	char		pwd[1096];
+	int			args;
+	char		*dir;
 
 	dir = NULL;
 	args = 0;
-	pwd = NULL;
 	while (parsed[args])
 		args++;
 	if (args > 3)
 		return (ft_error(CD_TOO_ARGS, NULL, 0));
-	pwd = getcwd(pwd, 10000);
-	(pwd != NULL) ? free(pwd) : 0;
+	getcwd(pwd, 1096);
 	dir = ft_get_dir(env, parsed, pwd);
 	if (dir == NULL)
 		return (ft_error(CD_NO_FILE, parsed, 1));

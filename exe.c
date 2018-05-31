@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/28 19:46:28 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/29 19:17:11 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/05/31 20:14:18 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -109,17 +109,37 @@ static	int			try_exe_without_path(char *path, char **exe)
 	return (0);
 }
 
+static	int			ft_count_p(char *s)
+{
+	int				i;
+	int				a;
+
+	i = 0;
+	a = 0;
+	while (s[i])
+	{
+		if (s[i] == '/')
+			a = i;
+		i++;
+	}
+	return (a);
+}
+
 static	int			exec_in_dir(char **parsed, char **exe)
 {
-	char			*pwd;
+	char			pwd[1096];
+	int				p;
 
-	pwd = NULL;
+	p = 0;
 	if (*parsed[0] == '.')
 	{
-		pwd = getcwd(pwd, 10000);
+	//	ft_printf("parsed >> %s\n", *parsed);
+		p = ft_count_p(parsed[0]);
+		getcwd(pwd, 1096);
 		*exe = get_prev_dir(parsed, pwd, 0);
-		if (pwd != NULL)
-			free(pwd);
+	//	ft_printf("*exe >> %s\n", *exe);
+		*exe = ft_strjoin(*exe, &parsed[0][p]);
+	//	ft_printf("apres *exe >> %s\n", *exe);
 		return (1);
 	}
 	return (0);
@@ -133,7 +153,14 @@ int					test_exe(t_env *env, char **parsed, char **exe)
 
 	i = 0;
 	if (exec_in_dir(parsed, exe))
-		return (1);
+	{
+		if (access(*exe, F_OK))
+			return (!(ft_error(CD_NO_FILE, &(*exe), 0)));
+		else if (access(*exe, X_OK))
+			return (!(ft_error(CD_DENIED, &(*exe), 0)));
+		else
+			return (1);
+	}
 	tmp = path_exist(env);
 	path = ft_strsplit(tmp, ':');
 	free(tmp);
@@ -145,12 +172,12 @@ int					test_exe(t_env *env, char **parsed, char **exe)
 		{
 			if (inside_dir(path[i], *parsed, exe))
 			{
-				ft_free_2char(path);
+				ft_free_2char(&path);
 				return (1);
 			}
 			i++;
 		}
 	}
-	ft_free_2char(path);
-	return (0);
+	ft_free_2char(&path);
+	return (1);
 }
