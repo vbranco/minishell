@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   builtin_setenv.c                                 .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/06/02 17:47:51 by vbranco      #+#   ##    ##    #+#       */
+/*   Updated: 2018/06/02 18:02:47 by vbranco     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "mini.h"
 
 static int	ft_count_args(char **parsed)
@@ -30,13 +43,13 @@ static int	test_var(char *s)
 	return (0);
 }
 
-int			setenvi(t_env *env, char **parsed)
+int			setenvi(t_env **env, char **parsed)
 {
 	t_env	*add;
 
 	add = NULL;
 	if (parsed[1] == NULL)
-		return (environment(env));
+		return (environment(*env));
 	else if (ft_count_args(parsed) > 3)
 		return (ft_error("setenv: Too many arguments", NULL, 0));
 	else if (test_var(parsed[1]))
@@ -48,7 +61,12 @@ int			setenvi(t_env *env, char **parsed)
 		add = ft_initialise();
 		add->name = parsed[1];
 		add->data = parsed[2];
-		ft_add(&env, add); 
+/*		add->next = *env;
+		(*env)->prev = add;
+		(*env)->next = add;
+		add->prev = *env;
+		(*env)->prev = NULL;*/
+//		ft_printf("env *p >> %p\n", env);
 /*		ft_printf("add->name : %s\n", add->name);
 		ft_printf("add->data : %s\n", add->data);
 		ft_printf("tmp->next->name : %s\n", tmp->next->name);

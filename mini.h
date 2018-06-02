@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:17 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/31 19:56:04 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/02 17:54:56 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -63,13 +63,14 @@ int				echo(t_env *env, char **parsed);
 **	BUILTIN_CD.c
 */
 int				cd(t_env *env, char **parsed);
+int				ft_error(char *error_message, char **parsed, int index);
 
 /*
 **	BUILTIN_CD2.c
 */
-int				ft_error(char *error_message, char **parsed, int index);
 
 char			*get_prev_dir(char **parsed, char *pwd, int index);
+int				ft_count_signes(char *str, char c);
 
 /*
 **	BUILTIN_ENV.c
@@ -80,12 +81,12 @@ void			update_env(t_env *env, char *pwd);
 /*
 **	BUILTIN_SETENV.c
 */
-int				setenvi(t_env *env, char **parsed);
+int				setenvi(t_env **env, char **parsed);
 
 /*
 **	BUILTIN_UNSETENV.c
 */
-int				unsetenvi(t_env *env, char **parsed);
+int				unsetenvi(t_env **env, char **parsed);
 
 /*
 **	EXE.c

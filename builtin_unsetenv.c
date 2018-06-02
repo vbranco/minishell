@@ -21,7 +21,7 @@ static void	ft_free_env(t_env **env, char *s)
 	}
 }
 
-int			unsetenvi(t_env *env, char **parsed)
+int			unsetenvi(t_env **env, char **parsed)
 {
 	int		i;
 
@@ -32,7 +32,7 @@ int			unsetenvi(t_env *env, char **parsed)
 	{
 		while (parsed[i])
 		{
-			ft_free_env(&env, parsed[i]);
+			ft_free_env(env, parsed[i]);
 			i++;
 		}
 	}

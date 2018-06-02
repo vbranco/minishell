@@ -1,17 +1,6 @@
 #include "mini.h"
 
-int				ft_error(char *error_message, char **parsed, int index)
-{
-
-	ft_putstr_fd(error_message, 2);
-	if (parsed != NULL)
-		ft_putendl_fd(parsed[index], 2);
-	else
-		ft_putchar_fd('\n', 2);
-	return (1);
-}
-
-static	int		ft_count_signes(char *str, char c)
+int				ft_count_signes(char *str, char c)
 {
 	int			i;
 	int			a;
@@ -27,15 +16,6 @@ static	int		ft_count_signes(char *str, char c)
 		i++;
 	}
 	return (a);
-}
-
-static	void	ft_upgrade_dir(char *parsed, char *pwd, char **dir)
-{
-	char		*tmp;
-
-	tmp = ft_strdup(*dir);
-	free(*dir);
-	free(tmp);
 }
 
 static	int		ft_path(char *s, char **dir)
@@ -61,7 +41,10 @@ static	int		ft_path(char *s, char **dir)
 		}
 		ft_strcat(tmp, "/");
 		ft_strcat(tmp, (s + i + 1));
-		*dir = ft_realloc(*dir, tmp);
+		if (*dir == NULL)
+			*dir = ft_strdup(tmp);
+		else
+			*dir = ft_realloc(*dir, tmp);
 	}
 	return (0);
 }

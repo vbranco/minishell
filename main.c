@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/31 20:14:19 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/02 18:02:48 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -42,22 +42,24 @@ void	execute(t_env *env, char **parsed)
 	}
 }
 
-int		built(t_env *envi, char **parsed)
+int		built(t_env **envi, char **parsed)
 {
 	if (*parsed == NULL)
 		return (1);
 	if (ft_strcmp(*parsed, "env") == 0)
-		return (environment(envi));
+		return (environment(*envi));
 	if (ft_strcmp(*parsed, "echo") == 0)
-		return (echo(envi, parsed));
+		return (echo(*envi, parsed));
 	if (ft_strcmp(*parsed, "cd") == 0)
-		return (cd(envi, parsed));
+		return (cd(*envi, parsed));
 	if (ft_strcmp(*parsed, "setenv") == 0)
 		return (setenvi(envi, parsed));
 	if (ft_strcmp(*parsed, "unsetenv") == 0)
 		return (unsetenvi(envi, parsed));
 	return (0);
 }
+
+
 
 void	minishell(t_env **env)
 {
@@ -85,7 +87,8 @@ void	minishell(t_env **env)
 		if (ft_strcmp(line, "exit") == 0)
 			break ;
 		parsed = ft_split(line);
-		if (built(*env, parsed) == 0)
+//		ft_change_parsed(parsed);
+		if (built(env, parsed) == 0)
 			execute(*env, parsed);
 	}
 	if (line)
@@ -101,6 +104,7 @@ int		main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	info = ft_get_env(env);
+//	ft_printf("info *p >> %p\n", &info);
 	minishell(&info);
 	ft_dell(&info);
 	return (0);
