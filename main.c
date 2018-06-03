@@ -13,23 +13,80 @@
 
 #include "mini.h"
 
-void	execute(t_env *env, char **parsed)
+static	int		ft_count_nb_env(t_env *lst)
 {
-	pid_t	pid;
-	char	*exe;
+	int			i;
+
+	while (lst)
+	{
+		i++;
+		lst = lst->next;
+	}
+	return (i);
+}
+
+static	char	**making_env(t_env *lst)
+{
+	char		**envi;
+	int			nb_env;
+	int			i;
+
+	i = 0;
+	nb_env = ft_count_nb_env(lst);
+	if (!(envi = (char**)malloc(sizeof(char) * (nb_env + 1))))
+		return (NULL);
+	while (lst)
+	{
+		envi[i] = ft_strdup(lst->name);
+		envi[i] = ft_realloc(envi[i], "=");
+		envi[i] = ft_realloc(envi[i], lst->data);
+		i++;
+		lst = lst->next;
+	}
+	envi[i] = NULL;
+	return	(envi);
+}
+
+//----------------debug-------------
+void			ft_show(char **env)
+{
+	int			i;
+
+	i = 0;
+	while (env[i])
+	{
+		ft_printf("%s\n", env[i]);
+		i++;
+	}
+}
+//------------------------
+
+void			execute(t_env *env, char **parsed)
+{
+	pid_t		pid;
+	char		*exe;
+	char		**environment;
 
 	exe = NULL;
 	if (test_exe(env, parsed, &exe))
 	{
-//		ft_printf("dans execute\n");
+		environment = making_env(env);
 		pid = fork();
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
 		if (pid == 0)
-			execve(exe, parsed, NULL);//char ** pour envoyer en env a la place de NULL || penser a gere le '~' EX: ls ~
+		{
+			if (execve(exe, parsed, environment) == -1)//penser a gere le '~' EX: ls ~
+			{
+				ft_putstr_fd(parsed[0], 2);
+				ft_putendl_fd(NO_CMD, 2);
+				return ;
+			}
+		}
 		else
 		{
 			wait(&pid);
+			ft_free_2char(&environment);
 			free(exe);
 		}
 		return ;

@@ -147,7 +147,8 @@ char			*ft_get_dir(t_env *env, char **parsed, char *pwd)
 	else
 	{
 		ft_get_index_flag(parsed, &i, &flag);
-		return(dir = get_stat(parsed, i, flag, pwd));
+//		return(dir = get_stat(parsed, i, flag, pwd));
+		return (dir = ft_strdup(parsed[i]));
 	}
 }
 
