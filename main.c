@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/02 18:02:48 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/04 20:01:55 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -47,20 +47,6 @@ static	char	**making_env(t_env *lst)
 	return	(envi);
 }
 
-//----------------debug-------------
-void			ft_show(char **env)
-{
-	int			i;
-
-	i = 0;
-	while (env[i])
-	{
-		ft_printf("%s\n", env[i]);
-		i++;
-	}
-}
-//------------------------
-
 void			execute(t_env *env, char **parsed)
 {
 	pid_t		pid;
@@ -80,7 +66,7 @@ void			execute(t_env *env, char **parsed)
 			{
 				ft_putstr_fd(parsed[0], 2);
 				ft_putendl_fd(NO_CMD, 2);
-				return ;
+				exit(1);
 			}
 		}
 		else
@@ -144,7 +130,6 @@ void	minishell(t_env **env)
 		if (ft_strcmp(line, "exit") == 0)
 			break ;
 		parsed = ft_split(line);
-//		ft_change_parsed(parsed);
 		if (built(env, parsed) == 0)
 			execute(*env, parsed);
 	}

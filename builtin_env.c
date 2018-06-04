@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   builtin_env.c                                    .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/06/04 17:56:33 by vbranco      #+#   ##    ##    #+#       */
+/*   Updated: 2018/06/04 19:23:09 by vbranco     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "mini.h"
 
 int			environment(t_env *s)
@@ -15,10 +28,11 @@ int			environment(t_env *s)
 	return (1);
 }
 
-void	update_env(t_env *env, char *pwd)
+void		update_env(t_env *env, char *pwd)
 {
 	t_env	*tmp;
 	char	*datatmp;
+	char	p[1096];
 
 	tmp = env;
 	while (tmp)
@@ -27,9 +41,10 @@ void	update_env(t_env *env, char *pwd)
 			break;
 		tmp = tmp->next;
 	}
+	getcwd(p, 1096);
 	datatmp = ft_strdup(tmp->data);
 	free(tmp->data);
-	tmp->data = ft_strdup(pwd);
+	tmp->data = ft_strdup(p);
 	tmp = env;
 	while (tmp)
 	{

@@ -62,6 +62,27 @@ void		ft_get(t_env **s, char *s1, int i)
 	ft_add(s, new);
 }
 
+t_env		*update(t_env *current)
+{
+	t_env	*p;
+	t_env	*o;
+	char	pwd[1096];
+
+	p = ft_initialise();
+	if (current == NULL)
+	{
+		getcwd(pwd, 1096);
+		p->name = ft_strdup("PWD");
+		p->data = ft_strdup(pwd);
+		o = ft_initialise();
+		o->name = ft_strdup("OLDPWD");
+		o->data = ft_strdup(pwd);
+		p->next = o;
+		o->prev = p;
+	}
+	return (p);
+}
+
 t_env		*ft_get_env(char **env)
 {
 	t_env	*s;
@@ -70,13 +91,18 @@ t_env		*ft_get_env(char **env)
 
 	s = NULL;
 	i = 0;
-	while (env[i])
+	if (*env == NULL)
+		s = update(s);
+	else
 	{
-		a = 0;
-		while (env[i][a] && env[i][a] != '=')
-			a++;
-		ft_get(&s, env[i], a);	
-		i++;
+		while (env[i])
+		{
+			a = 0;
+			while (env[i][a] && env[i][a] != '=')
+				a++;
+			ft_get(&s, env[i], a);
+			i++;
+		}
 	}
 	return (s);
 }

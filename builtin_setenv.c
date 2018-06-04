@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/06/02 17:47:51 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/02 18:02:47 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/04 16:56:32 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -46,8 +46,10 @@ static int	test_var(char *s)
 int			setenvi(t_env **env, char **parsed)
 {
 	t_env	*add;
+	t_env	*tmp;
 
 	add = NULL;
+	tmp = *env;
 	if (parsed[1] == NULL)
 		return (environment(*env));
 	else if (ft_count_args(parsed) > 3)
@@ -56,21 +58,14 @@ int			setenvi(t_env **env, char **parsed)
 		return (ft_error(ENV_VAR, NULL, 0));
 	else
 	{
-//		ft_printf("parsed[1] >> %s\n", parsed[1]);
-//		ft_printf("parsed[2] >> %s\n", parsed[2]);
 		add = ft_initialise();
-		add->name = parsed[1];
-		add->data = parsed[2];
-/*		add->next = *env;
-		(*env)->prev = add;
-		(*env)->next = add;
-		add->prev = *env;
-		(*env)->prev = NULL;*/
-//		ft_printf("env *p >> %p\n", env);
-/*		ft_printf("add->name : %s\n", add->name);
-		ft_printf("add->data : %s\n", add->data);
-		ft_printf("tmp->next->name : %s\n", tmp->next->name);
-		ft_printf("tmp->next->data : %s\n", tmp->next->data);
-*/	}
+		add->name = ft_strdup(parsed[1]);
+		add->data = ft_strdup(parsed[2]);
+		while (tmp->next)
+			tmp = tmp->next;
+		add->next = tmp->next;
+		add->prev = tmp;
+		tmp->next = add;
+	}
 	return (1);
 }

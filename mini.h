@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:17 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/02 17:54:56 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/04 19:46:45 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -63,7 +63,6 @@ int				echo(t_env *env, char **parsed);
 **	BUILTIN_CD.c
 */
 int				cd(t_env *env, char **parsed);
-int				ft_error(char *error_message, char **parsed, int index);
 
 /*
 **	BUILTIN_CD2.c
@@ -97,5 +96,14 @@ int				test_exe(t_env *env, char **parsed, char **exe);
 **	PARSING.c
 */
 char			**ft_split(char *line);
+
+/*
+**	TOOLS.c
+*/
+int				searching_on_env(t_env *env, char *looking);
+int				ft_error(char *error_message, char **parsed, int index);
+int				ft_count_args_shell(char **parsed);
+void			ft_get_index_flag(char **parsed, int *, int *flag);
+
 
 #endif

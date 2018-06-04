@@ -1,0 +1,77 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   tools.c                                          .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/06/04 17:16:03 by vbranco      #+#   ##    ##    #+#       */
+/*   Updated: 2018/06/04 19:50:11 by vbranco     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
+#include "mini.h"
+
+int				searching_on_env(t_env *env, char *looking)
+{
+	t_env		*tmp;
+	if (env == NULL)
+		return (0);
+	tmp = env;
+	while (tmp->next)
+	{
+		if (!ft_strcmp(tmp->name, looking))
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
+int				ft_error(char *error_message, char **parsed, int index)
+{
+
+	ft_putstr_fd(error_message, 2);
+	if (parsed != NULL)
+		ft_putendl_fd(parsed[index], 2);
+	else
+		ft_putchar_fd('\n', 2);
+	return (1);
+}
+
+int		ft_count_args_shell(char **parsed)
+{
+	int			i;
+	int			a;
+
+	a = 1;
+	i = 1;
+	while (parsed[i])
+	{
+		if (parsed[i][0] != '-')
+			a++;
+		i++;
+	}
+	return (a);
+}
+
+void	ft_get_index_flag(char **parsed, int *i, int *flag)
+{
+	int			a;
+
+	a = 1;
+	while (parsed[a] && parsed[a][0] == '-')
+	{
+		if (!ft_strcmp(parsed[a], "-P"))
+			*flag = a;
+		else if (!ft_strcmp(parsed[a], "-L"))
+			*flag = a;
+		else
+		{
+			*flag = -1;
+			break ;
+		}
+		a++;
+	}
+	*i = a;
+}

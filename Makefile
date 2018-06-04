@@ -6,7 +6,7 @@
 #    By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/03/07 17:08:49 by vbranco      #+#   ##    ##    #+#        #
-#    Updated: 2018/05/19 16:06:08 by vbranco     ###    #+. /#+    ###.fr      #
+#    Updated: 2018/06/04 17:17:06 by vbranco     ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -16,7 +16,7 @@ NAME		=	minishell
 HEADER		=	mini.h
 
 FILENAMES	=	main.c ft_initialise.c builtins.c builtin_cd.c builtin_cd2.c builtin_env.c builtin_setenv.c builtin_unsetenv.c parsing.c\
-	exe.c
+	exe.c tools.c
 
 SOURCES		=	$(addprefix ./, $(FILENAMES))
 
