@@ -10,7 +10,6 @@ t_env		*ft_initialise(void)
 	env->name = NULL;
 	env->data = NULL;
 	env->next = NULL;
-	env->prev = NULL;
 	return (env);
 }
 
@@ -25,29 +24,32 @@ void		ft_add(t_env **s, t_env *new)
 			tmp = tmp->next;
 		tmp->next = new;
 		new->next = NULL;
-		new->prev = tmp;
 	}
 	else
 	{
 		new->next = *s;
-		new->prev = *s;
 		*s = new;
 	}
 }
 
-void		ft_dell(t_env **s)
+void		ft_dell(t_env_head **head)
 {
 	t_env	*tmp;
+	t_env	*s;
 
-	while (*s)
+	s = (*head)->next;
+	while (s)
 	{
-		tmp = (*s)->next;
-		free((*s)->name);
-		free((*s)->data);
-		free(*s);
-		(*s) = tmp;
+		tmp = (s)->next;
+		free((s)->name);
+		free((s)->data);
+		free(s);
+		(s) = tmp;
 	}
-	*s = NULL;
+	s = NULL;
+	free(*head);
+	head = NULL;
+
 }
 
 void		ft_get(t_env **s, char *s1, int i)
@@ -78,7 +80,6 @@ t_env		*update(t_env *current)
 		o->name = ft_strdup("OLDPWD");
 		o->data = ft_strdup(pwd);
 		p->next = o;
-		o->prev = p;
 	}
 	return (p);
 }

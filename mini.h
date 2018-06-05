@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:17 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/04 19:46:45 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/05 19:31:08 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -38,15 +38,19 @@ typedef struct		s_env
 	char			*name;
 	char			*data;
 	struct s_env	*next;
-	struct s_env	*prev;
 }					t_env;
+
+typedef	struct		s_env_head
+{
+	struct s_env	*next;
+}					t_env_head;
 
 /*
 **	ENV >> ft_initialise.c
 */
 t_env			*ft_initialise(void);
 t_env			*ft_get_env(char **env);
-void			ft_dell(t_env **s);
+void			ft_dell(t_env_head **s);
 void			ft_add(t_env **s, t_env *new);
 
 /*
@@ -57,12 +61,12 @@ void			ft_add(t_env **s, t_env *new);
 /*
 **	BUILTINS.c
 */
-int				echo(t_env *env, char **parsed);
+int				echo(t_env_head *head, char **parsed);
 
 /*
 **	BUILTIN_CD.c
 */
-int				cd(t_env *env, char **parsed);
+int				cd(t_env_head *head, char **parsed);
 
 /*
 **	BUILTIN_CD2.c
@@ -74,18 +78,20 @@ int				ft_count_signes(char *str, char c);
 /*
 **	BUILTIN_ENV.c
 */
-int				environment(t_env *s);
+int				environment(t_env_head *head, char **parsed);
 void			update_env(t_env *env, char *pwd);
+int				test_env_flags(t_env_head *head, char **parsed);
+int				ft_print_env(t_env_head *head);
 
 /*
 **	BUILTIN_SETENV.c
 */
-int				setenvi(t_env **env, char **parsed);
+int				setenvi(t_env_head *head, char **parsed);
 
 /*
 **	BUILTIN_UNSETENV.c
 */
-int				unsetenvi(t_env **env, char **parsed);
+int				unsetenvi(t_env_head *head, char **parsed);
 
 /*
 **	EXE.c

@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/06/02 17:47:51 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/04 16:56:32 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/05 19:31:13 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -43,15 +43,15 @@ static int	test_var(char *s)
 	return (0);
 }
 
-int			setenvi(t_env **env, char **parsed)
+int			setenvi(t_env_head *head, char **parsed)
 {
 	t_env	*add;
 	t_env	*tmp;
 
 	add = NULL;
-	tmp = *env;
+	tmp = head->next;
 	if (parsed[1] == NULL)
-		return (environment(*env));
+		return (ft_print_env(head));
 	else if (ft_count_args(parsed) > 3)
 		return (ft_error("setenv: Too many arguments", NULL, 0));
 	else if (test_var(parsed[1]))
@@ -60,11 +60,11 @@ int			setenvi(t_env **env, char **parsed)
 	{
 		add = ft_initialise();
 		add->name = ft_strdup(parsed[1]);
-		add->data = ft_strdup(parsed[2]);
+		if (parsed[2])
+			add->data = ft_strdup(parsed[2]);
 		while (tmp->next)
 			tmp = tmp->next;
 		add->next = tmp->next;
-		add->prev = tmp;
 		tmp->next = add;
 	}
 	return (1);

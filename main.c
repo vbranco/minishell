@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/04 20:01:55 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/05 20:04:52 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -47,11 +47,14 @@ static	char	**making_env(t_env *lst)
 	return	(envi);
 }
 
-void			execute(t_env *env, char **parsed)
+void			execute(t_env_head *head, char **parsed)
 {
 	pid_t		pid;
 	char		*exe;
 	char		**environment;
+	t_env		*env;
+
+	env = head->next;
 
 	exe = NULL;
 	if (test_exe(env, parsed, &exe))
@@ -62,6 +65,7 @@ void			execute(t_env *env, char **parsed)
 			ft_putendl_fd("ERROR FORK()", 2);
 		if (pid == 0)
 		{
+			//penser a changer environment suivant le flag env -i
 			if (execve(exe, parsed, environment) == -1)//penser a gere le '~' EX: ls ~
 			{
 				ft_putstr_fd(parsed[0], 2);
@@ -85,26 +89,26 @@ void			execute(t_env *env, char **parsed)
 	}
 }
 
-int		built(t_env **envi, char **parsed)
+int		built(t_env_head **head, char **parsed)
 {
 	if (*parsed == NULL)
 		return (1);
 	if (ft_strcmp(*parsed, "env") == 0)
-		return (environment(*envi));
+		return (environment(*head, parsed));
 	if (ft_strcmp(*parsed, "echo") == 0)
-		return (echo(*envi, parsed));
+		return (echo(*head, parsed));
 	if (ft_strcmp(*parsed, "cd") == 0)
-		return (cd(*envi, parsed));
+		return (cd(*head, parsed));
 	if (ft_strcmp(*parsed, "setenv") == 0)
-		return (setenvi(envi, parsed));
+		return (setenvi(*head, parsed));
 	if (ft_strcmp(*parsed, "unsetenv") == 0)
-		return (unsetenvi(envi, parsed));
+		return (unsetenvi(*head, parsed));
 	return (0);
 }
 
 
 
-void	minishell(t_env **env)
+void	minishell(t_env_head **head)
 {
 	char	*line;
 	char	**parsed;
@@ -130,8 +134,8 @@ void	minishell(t_env **env)
 		if (ft_strcmp(line, "exit") == 0)
 			break ;
 		parsed = ft_split(line);
-		if (built(env, parsed) == 0)
-			execute(*env, parsed);
+		if (built(head, parsed) == 0)
+			execute(*head, parsed);
 	}
 	if (line)
 		free(line);
@@ -139,15 +143,19 @@ void	minishell(t_env **env)
 		ft_free_2char(&parsed);
 }
 
-int		main(int ac, char **av, char **env)
+int				main(int ac, char **av, char **env)
 {
-	t_env	*info;
+	t_env		*info;
+	t_env_head	*head;
 
 	(void)ac;
 	(void)av;
+	if (!(head = (t_env_head*)malloc(sizeof(t_env_head))))
+		return (0);
 	info = ft_get_env(env);
+	head->next = info;
 //	ft_printf("info *p >> %p\n", &info);
-	minishell(&info);
-	ft_dell(&info);
+	minishell(&head);
+	ft_dell(&head);
 	return (0);
 }

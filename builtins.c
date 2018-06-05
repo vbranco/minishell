@@ -6,18 +6,20 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/31 19:44:33 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/02 17:50:04 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/05 17:32:27 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "mini.h"
 
-static void		print_env(t_env *env, char *s)
+static void		print_env(t_env_head *head, char *s)
 {
 	t_env		*tmp;
 	char		*try;
+	t_env		*env;
 
+	env = head->next;
 	try = ft_strdup(s+1);
 	tmp = env;
 	while (tmp)
@@ -33,7 +35,7 @@ static void		print_env(t_env *env, char *s)
 	free(try);
 }
 
-int				echo(t_env *env, char **parsed)
+int				echo(t_env_head *head, char **parsed)
 {
 	int			flag;
 	int			i;
@@ -50,7 +52,7 @@ int				echo(t_env *env, char **parsed)
 	while (parsed[i])
 	{
 		if (parsed[i][0] == '$')
-			print_env(env, parsed[i]);
+			print_env(head, parsed[i]);
 		else
 			ft_printf("%s", parsed[i]);
 		i++;

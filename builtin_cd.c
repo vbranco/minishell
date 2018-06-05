@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/06/02 10:26:07 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/04 20:01:54 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/05 17:56:13 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -122,12 +122,14 @@ char			*ft_get_dir(t_env *env, char **parsed, char *pwd)
 	}
 }
 
-int				cd(t_env *env, char **parsed)
+int				cd(t_env_head *head, char **parsed)
 {
 	char		pwd[1096];
 	int			args;
 	char		*dir;
+	t_env		*env;
 
+	env = head->next;
 	dir = NULL;
 	args = ft_count_args_shell(parsed);
 	if (args >= 3)
