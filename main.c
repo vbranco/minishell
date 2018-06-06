@@ -25,21 +25,29 @@ static	int		ft_count_nb_env(t_env *lst)
 	return (i);
 }
 
-static	char	**making_env(t_env *lst)
+static	char	**making_env(t_env_head *head)
 {
 	char		**envi;
 	int			nb_env;
 	int			i;
+	t_env		*lst;
 
+	lst = head->next;
+	if (head->next == NULL)
+		return (NULL);
 	i = 0;
 	nb_env = ft_count_nb_env(lst);
 	if (!(envi = (char**)malloc(sizeof(char) * (nb_env + 1))))
 		return (NULL);
 	while (lst)
 	{
-		envi[i] = ft_strdup(lst->name);
-		envi[i] = ft_realloc(envi[i], "=");
-		envi[i] = ft_realloc(envi[i], lst->data);
+		if (lst->name)
+		{
+			envi[i] = ft_strdup(lst->name);
+			envi[i] = ft_realloc(envi[i], "=");
+		}
+		if (lst->data)
+			envi[i] = ft_realloc(envi[i], lst->data);
 		i++;
 		lst = lst->next;
 	}
@@ -52,14 +60,13 @@ void			execute(t_env_head *head, char **parsed)
 	pid_t		pid;
 	char		*exe;
 	char		**environment;
-	t_env		*env;
 
-	env = head->next;
+	environment = NULL;
 
 	exe = NULL;
-	if (test_exe(env, parsed, &exe))
+	if (test_exe(head->next, parsed, &exe))
 	{
-		environment = making_env(env);
+		environment = making_env(head);
 		pid = fork();
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
@@ -112,13 +119,11 @@ void	minishell(t_env_head **head)
 {
 	char	*line;
 	char	**parsed;
-	int		i;
 
 	line = NULL;
 	parsed = NULL;
 	while (101)
 	{
-		i = 0;
 		ft_printf("$> ");
 		if (line != NULL)
 		{
@@ -137,10 +142,8 @@ void	minishell(t_env_head **head)
 		if (built(head, parsed) == 0)
 			execute(*head, parsed);
 	}
-	if (line)
-		free(line);
-	if (parsed != NULL)
-		ft_free_2char(&parsed);
+	(line) ? free(line) : 0;
+	(parsed != NULL) ? ft_free_2char(&parsed) : 0;
 }
 
 int				main(int ac, char **av, char **env)

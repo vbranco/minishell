@@ -23,6 +23,7 @@ static int	ft_count_args(char **parsed)
 		while (parsed[i])
 			i++;
 	}
+
 	return (i);
 }
 
@@ -34,8 +35,8 @@ static int	test_var(char *s)
 	while (s[i])
 	{
 		if ((s[i] >= 'a' && s[i] <= 'z') ||
-			(s[i] >= 'A' && s[i] <= 'Z') ||
-			(s[i] >= '0' && s[i] <= '9'))
+				(s[i] >= 'A' && s[i] <= 'Z') ||
+				(s[i] >= '0' && s[i] <= '9'))
 			i++;
 		else
 			return (1);
@@ -58,14 +59,29 @@ int			setenvi(t_env_head *head, char **parsed)
 		return (ft_error(ENV_VAR, NULL, 0));
 	else
 	{
-		add = ft_initialise();
-		add->name = ft_strdup(parsed[1]);
-		if (parsed[2])
-			add->data = ft_strdup(parsed[2]);
-		while (tmp->next)
-			tmp = tmp->next;
-		add->next = tmp->next;
-		tmp->next = add;
+		if (searching_on_env(head->next, parsed[1]))//penser a changer parsed[1] par un parsed[i] car des flags peuvent intervenir
+		{
+			while (tmp)
+			{
+				if (!ft_strcmp(tmp->name, parsed[1]))
+					break ;
+				tmp = tmp->next;
+			}
+			if (tmp->data)
+				free(tmp->data);
+			tmp->data = ft_strdup(parsed[2]);
+		}
+		else
+		{
+			add = ft_initialise();
+			add->name = ft_strdup(parsed[1]);
+			if (parsed[2])
+				add->data = ft_strdup(parsed[2]);
+			while (tmp->next)
+				tmp = tmp->next;
+			add->next = tmp->next;
+			tmp->next = add;
+		}
 	}
 	return (1);
 }
