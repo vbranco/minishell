@@ -13,7 +13,7 @@ t_env		*ft_initialise(void)
 	return (env);
 }
 
-void		ft_add(t_env **s, t_env *new)
+void		ft_add(t_env **s, t_env *add)
 {
 	t_env	*tmp;
 
@@ -22,13 +22,13 @@ void		ft_add(t_env **s, t_env *new)
 	{
 		while (tmp->next)
 			tmp = tmp->next;
-		tmp->next = new;
-		new->next = NULL;
+		tmp->next = add;
+		add->next = NULL;
 	}
 	else
 	{
-		new->next = *s;
-		*s = new;
+		add->next = *s;
+		*s = add;
 	}
 }
 

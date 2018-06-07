@@ -179,5 +179,5 @@ int					test_exe(t_env *env, char **parsed, char **exe)
 		}
 	}
 	ft_free_2char(&path);
-	return (1);
+	return (0);
 }

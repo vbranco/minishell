@@ -66,7 +66,7 @@ void			execute(t_env_head *head, char **parsed)
 	exe = NULL;
 	if (test_exe(head->next, parsed, &exe))
 	{
-//		environment = making_env(head);
+		environment = making_env(head);
 		pid = fork();
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
@@ -102,8 +102,15 @@ int		built(t_env_head **head, char **parsed)
 {
 	if (*parsed == NULL)
 		return (1);
-	if (ft_strcmp(*parsed, "env") == 0)
+	if (!ft_strcmp(*parsed, "env"))
+	{
+		if (!searching_on_env(*head, "PATH"))
+		{
+			ft_putendl_fd("env: Command not found", 2);
+			return (1);
+		}
 		return (environment(*head, parsed));
+	}
 	if (ft_strcmp(*parsed, "echo") == 0)
 		return (echo(*head, parsed));
 	if (ft_strcmp(*parsed, "cd") == 0)

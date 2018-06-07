@@ -51,7 +51,7 @@ typedef	struct		s_env_head
 t_env			*ft_initialise(void);
 t_env			*ft_get_env(char **env);
 void			ft_dell(t_env_head **s);
-void			ft_add(t_env **s, t_env *new);
+void			ft_add(t_env **s, t_env *add);
 
 /*
 **	DEBUG---------------------------------
@@ -82,6 +82,8 @@ int				environment(t_env_head *head, char **parsed);
 void			update_env(t_env_head *head, char *dir);
 int				test_env_flags(t_env_head *head, char **parsed);
 int				ft_print_env(t_env_head *head);
+void			ft_updating_var(t_env_head *head, char *var, char *current);
+void			ft_create_var(t_env_head *head, char *var, char *dir);
 
 /*
 **	BUILTIN_SETENV.c

@@ -49,10 +49,22 @@ int			test_env_flags(t_env_head *head, char **parsed)
 
 int			environment(t_env_head *head, char **parsed)
 {
+	int		i;
+
+	i = 1; // a voir pour l'indice
 	//-----A GERER----
-//	if (parsed[1] == NULL)
+	if (parsed[1] == NULL)
 		ft_print_env(head);
-//	else if (parsed[1][0] == '-')
+/*	else if (!ft_strcmp(parsed[1], "-i"))
+	{
+		i++;
+		while (parsed[i])
+		{
+			if (test_exe())
+			i++;
+		}
+
+	}*/
 //	else
 
 //	if (test_env_flags(head, parsed)) //enlever pour tester!!!!
@@ -62,7 +74,7 @@ int			environment(t_env_head *head, char **parsed)
 	return (1);
 }
 
-static	void	ft_updating_var(t_env_head *head, char *var, char *current)
+void			ft_updating_var(t_env_head *head, char *var, char *dir)
 {
 	t_env		*env;
 
@@ -74,17 +86,17 @@ static	void	ft_updating_var(t_env_head *head, char *var, char *current)
 		env = env->next;
 	}
 	free(env->data);
-	env->data = ft_strdup(current); 
+	env->data = ft_strdup(dir); 
 }
 
-static	void	ft_create_var(t_env_head *head, char *varname, char *data)
+void			ft_create_var(t_env_head *head, char *var, char *dir)
 {
 	t_env		*add;
 	t_env		*env;
 
 	add = ft_initialise();
-	add->name = ft_strdup(varname);
-	add->data = ft_strdup(data);
+	add->name = ft_strdup(var);
+	add->data = ft_strdup(dir);
 	if (head->next != NULL)
 	{
 		env = head->next;
