@@ -14,7 +14,7 @@
 #include "mini.h"
 
 
-static char		*get_dir_from_env(t_env *env, char *looking)
+static char		*get_dir_from_env(t_env *env, char *looking, char **error_message)
 {
 	t_env		*tmp;
 	char		*dir;
@@ -33,7 +33,15 @@ static char		*get_dir_from_env(t_env *env, char *looking)
 		getcwd(pwd, 1096);
 		dir = ft_strdup(pwd);
 	}
-*/	if (!ft_strcmp(looking, "OLDPWD"))
+*/	
+	if (dir == NULL)
+	{
+		if (!ft_strcmp(looking, "OLDPWD"))
+			*error_message = ft_strdup("cd: OLDPWD not set");
+		if (!ft_strcmp(looking, "HOME"))
+			*error_message = ft_strdup("cd: HOME not set");
+	}
+	if (!ft_strcmp(looking, "OLDPWD") && dir != NULL)
 		ft_printf("%s\n", dir);
 	return (dir);
 }
@@ -82,8 +90,11 @@ static	int		looking_stat(char *dir)
 	return (0);
 }
 
-static	int		change_dir(t_env **env, char **parsed, char *dir)
+static	int		change_dir(t_env_head *head, char **parsed, char *dir)
 {
+	char		p[1096];
+
+	getcwd(p, 1096);
 	if (access(dir, F_OK))
 	{
 		return (ft_error(CD_NO_FILE, parsed, 1));
@@ -96,11 +107,11 @@ static	int		change_dir(t_env **env, char **parsed, char *dir)
 		return (ft_error(CD_DENIED, parsed, 1));
 	if ((chdir(dir)) == -1)
 		return (ft_error("CHDIR: cannot open: ", parsed, 1));
-	update_env(*env, dir);
+	update_env(head, p);
 	return (0);
 }
 
-char			*ft_get_dir(t_env *env, char **parsed, char *pwd)
+char			*ft_get_dir(t_env *env, char **parsed, char *pwd, char **error_message)
 {
 	char		*dir;
 	int			i;
@@ -109,9 +120,9 @@ char			*ft_get_dir(t_env *env, char **parsed, char *pwd)
 	flag = 0;
 	i = 0;
 	if (parsed[1] == NULL || (ft_strcmp(parsed[1], "~") == 0))
-		return (dir = get_dir_from_env(env, "HOME"));
+		return (dir = get_dir_from_env(env, "HOME", error_message));
 	else if (ft_strcmp(parsed[1], "-") == 0)
-		return (dir = get_dir_from_env(env, "OLDPWD"));
+		return (dir = get_dir_from_env(env, "OLDPWD", error_message));
 	else
 	{
 		ft_get_index_flag(parsed, &i, &flag);
@@ -127,24 +138,24 @@ int				cd(t_env_head *head, char **parsed)
 	char		pwd[1096];
 	int			args;
 	char		*dir;
+	char		*error_message;
 	t_env		*env;
 
 	env = head->next;
 	dir = NULL;
+	error_message = NULL;
 	args = ft_count_args_shell(parsed);
 	if (args >= 3)
 		return (ft_error(CD_TOO_ARGS, NULL, 0));
 	getcwd(pwd, 1096);
-	dir = ft_get_dir(env, parsed, pwd);
-	if (dir == NULL)
-	{
-		if (searching_on_env(env, "HOME"))
-			ft_putendl_fd("Usage: cd [-L | -P] [dir]", 2);
-		else
-			ft_putendl_fd("cd: $HOME not defined", 2);
-		return (1);
-	}
-	change_dir(&env, parsed, dir);
-	free(dir);
+	dir = ft_get_dir(env, parsed, pwd, &error_message);
+	if (error_message)
+		ft_putendl_fd(error_message, 2);
+	else
+		change_dir(head, parsed, dir);
+	if (dir)
+		free(dir);
+	if (error_message)
+		free(error_message);
 	return (1);
 }

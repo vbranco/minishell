@@ -62,31 +62,55 @@ int			environment(t_env_head *head, char **parsed)
 	return (1);
 }
 
-void		update_env(t_env *env, char *pwd)
+static	void	ft_updating_var(t_env_head *head, char *var, char *current)
 {
-	t_env	*tmp;
-	char	*datatmp;
-	char	p[1096];
+	t_env		*env;
 
-	tmp = env;
-	while (tmp)
+	env = head->next;
+	while (env)
 	{
-		if (ft_strcmp(tmp->name, "PWD") == 0)
-			break;
-		tmp = tmp->next;
-	}
-	getcwd(p, 1096);
-	datatmp = ft_strdup(tmp->data);
-	free(tmp->data);
-	tmp->data = ft_strdup(p);
-	tmp = env;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->name, "OLDPWD") == 0)
+		if (!ft_strcmp(env->name, var))
 			break ;
-		tmp = tmp->next;
+		env = env->next;
 	}
-	free(tmp->data);
-	tmp->data = ft_strdup(datatmp);
-	free(datatmp);
+	free(env->data);
+	env->data = ft_strdup(current); 
+}
+
+static	void	ft_create_var(t_env_head *head, char *varname, char *data)
+{
+	t_env		*add;
+	t_env		*env;
+
+	add = ft_initialise();
+	add->name = ft_strdup(varname);
+	add->data = ft_strdup(data);
+	if (head->next != NULL)
+	{
+		env = head->next;
+		while (env)
+		{
+			if (env->next == NULL)
+				break ;
+			env = env->next;
+		}
+		env->next = add;
+	}
+	else
+		head->next = add;
+}
+
+void			update_env(t_env_head *head, char *dir)
+{
+	char		p[1096];
+
+	getcwd(p, 1096);
+	if (searching_on_env(head, "OLDPWD"))
+		ft_updating_var(head, "OLDPWD", dir);
+	else
+		ft_create_var(head, "OLDPWD", p);
+	if (searching_on_env(head, "PWD"))
+		ft_updating_var(head, "PWD", p);
+	else
+		ft_create_var(head, "PWD", p);
 }

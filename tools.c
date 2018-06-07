@@ -13,13 +13,13 @@
 
 #include "mini.h"
 
-int				searching_on_env(t_env *env, char *looking)
+int				searching_on_env(t_env_head *head, char *looking)
 {
 	t_env		*tmp;
-	if (env == NULL)
+	if (head->next == NULL)
 		return (0);
-	tmp = env;
-	while (tmp->next)
+	tmp = head->next;
+	while (tmp)
 	{
 		if (!ft_strcmp(tmp->name, looking))
 			return (1);

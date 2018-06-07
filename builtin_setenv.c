@@ -59,7 +59,7 @@ int			setenvi(t_env_head *head, char **parsed)
 		return (ft_error(ENV_VAR, NULL, 0));
 	else
 	{
-		if (searching_on_env(head->next, parsed[1]))//penser a changer parsed[1] par un parsed[i] car des flags peuvent intervenir
+		if (searching_on_env(head, parsed[1]))//penser a changer parsed[1] par un parsed[i] car des flags peuvent intervenir
 		{
 			while (tmp)
 			{

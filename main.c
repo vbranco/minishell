@@ -66,7 +66,7 @@ void			execute(t_env_head *head, char **parsed)
 	exe = NULL;
 	if (test_exe(head->next, parsed, &exe))
 	{
-		environment = making_env(head);
+//		environment = making_env(head);
 		pid = fork();
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
@@ -77,6 +77,8 @@ void			execute(t_env_head *head, char **parsed)
 			{
 				ft_putstr_fd(parsed[0], 2);
 				ft_putendl_fd(NO_CMD, 2);
+				ft_free_2char(&environment);
+				free(exe);
 				exit(1);
 			}
 		}
@@ -157,7 +159,6 @@ int				main(int ac, char **av, char **env)
 		return (0);
 	info = ft_get_env(env);
 	head->next = info;
-//	ft_printf("info *p >> %p\n", &info);
 	minishell(&head);
 	ft_dell(&head);
 	return (0);

@@ -79,7 +79,7 @@ int				ft_count_signes(char *str, char c);
 **	BUILTIN_ENV.c
 */
 int				environment(t_env_head *head, char **parsed);
-void			update_env(t_env *env, char *pwd);
+void			update_env(t_env_head *head, char *dir);
 int				test_env_flags(t_env_head *head, char **parsed);
 int				ft_print_env(t_env_head *head);
 
@@ -106,7 +106,7 @@ char			**ft_split(char *line);
 /*
 **	TOOLS.c
 */
-int				searching_on_env(t_env *env, char *looking);
+int				searching_on_env(t_env_head *head, char *looking);
 int				ft_error(char *error_message, char **parsed, int index);
 int				ft_count_args_shell(char **parsed);
 void			ft_get_index_flag(char **parsed, int *, int *flag);
