@@ -17,6 +17,7 @@ static	int		ft_count_nb_env(t_env *lst)
 {
 	int			i;
 
+	i = 0;
 	while (lst)
 	{
 		i++;
@@ -134,25 +135,19 @@ void	minishell(t_env_head **head)
 	while (101)
 	{
 		ft_printf("$> ");
-		if (line != NULL)
-		{
-			free(line);
-			line = NULL;
-		}
-		if (parsed != NULL)
-		{
-			ft_free_2char(&parsed);
-			parsed = NULL;
-		}
 		get_next_line(0, &line);
 		if (ft_strcmp(line, "exit") == 0)
+		{
+			free(line);
+			ft_free_2char(&parsed);
 			break ;
+		}
 		parsed = ft_split(line);
 		if (built(head, parsed) == 0)
 			execute(*head, parsed);
+		free(line);
+		ft_free_2char(&parsed);
 	}
-	(line) ? free(line) : 0;
-	(parsed != NULL) ? ft_free_2char(&parsed) : 0;
 }
 
 int				main(int ac, char **av, char **env)

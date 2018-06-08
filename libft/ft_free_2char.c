@@ -27,7 +27,7 @@ void		ft_free_2char(char ***s)
 			free(tmp[i]);
 			i++;
 		}
-		free(tmp);
+		free(tmp); //ceci cree des erreurs avec valgrind
 	}
 	s = NULL;
 }

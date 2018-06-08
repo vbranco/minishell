@@ -53,9 +53,9 @@ int			environment(t_env_head *head, char **parsed)
 
 	i = 1; // a voir pour l'indice
 	//-----A GERER----
-	if (parsed[1] == NULL)
+	if (parsed[i] == NULL)
 		ft_print_env(head);
-/*	else if (!ft_strcmp(parsed[1], "-i"))
+/*	else if (!ft_strcmp(parsed[i], "-i"))
 	{
 		i++;
 		while (parsed[i])
