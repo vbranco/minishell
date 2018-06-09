@@ -18,12 +18,12 @@ static	int		ft_count_nb_env(t_env *lst)
 	int			i;
 
 	i = 0;
-	while (lst)
+	while (lst->next)
 	{
 		i++;
 		lst = lst->next;
 	}
-	return (i);
+	return (i + 1);
 }
 
 static	char	**making_env(t_env_head *head)
@@ -38,9 +38,10 @@ static	char	**making_env(t_env_head *head)
 		return (NULL);
 	i = 0;
 	nb_env = ft_count_nb_env(lst);
+	ft_printf("nb_env >> %d\n", nb_env);
 	if (!(envi = (char**)malloc(sizeof(char) * (nb_env + 1))))
 		return (NULL);
-	while (lst)
+	while (nb_env > 0)
 	{
 		if (lst->name)
 		{
@@ -51,6 +52,7 @@ static	char	**making_env(t_env_head *head)
 			envi[i] = ft_realloc(envi[i], lst->data);
 		i++;
 		lst = lst->next;
+		nb_env--;
 	}
 	envi[i] = NULL;
 	return	(envi);
@@ -67,7 +69,7 @@ void			execute(t_env_head *head, char **parsed)
 	exe = NULL;
 	if (test_exe(head->next, parsed, &exe))
 	{
-		environment = making_env(head);
+//		environment = making_env(head); //a traiter
 		pid = fork();
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
@@ -136,13 +138,13 @@ void	minishell(t_env_head **head)
 	{
 		ft_printf("$> ");
 		get_next_line(0, &line);
+		parsed = ft_split(line);
 		if (ft_strcmp(line, "exit") == 0)
 		{
 			free(line);
 			ft_free_2char(&parsed);
 			break ;
 		}
-		parsed = ft_split(line);
 		if (built(head, parsed) == 0)
 			execute(*head, parsed);
 		free(line);
