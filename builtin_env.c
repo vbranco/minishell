@@ -31,19 +31,24 @@ int			ft_print_env(t_env_head *head)
 
 int			test_env_flags(t_env_head *head, char **parsed)
 {
-	char	*tmp;
+//	char	*tmp;
 
 	if (parsed[1])
 	{
 		if (!ft_strcmp(parsed[1], "-i"))
 		{
 			if (access(parsed[2], X_OK))
+			{
+				ft_printf("1dans test_env_flags et c'est exe\n");
 				return (1);
+			}
+			else
+				ft_printf("2dans test_env_flags et c'est exe\n");
 //			if (searching_on_env(head->next, parsed[2]))
 		}
 
 	}
-	free(tmp);
+//	free(tmp);
 	return (0);
 }
 
@@ -55,16 +60,15 @@ int			environment(t_env_head *head, char **parsed)
 	//-----A GERER----
 	if (parsed[i] == NULL)
 		ft_print_env(head);
-/*	else if (!ft_strcmp(parsed[i], "-i"))
+	else if (!ft_strcmp(parsed[i], "-i"))
 	{
 		i++;
-		while (parsed[i])
-		{
-			if (test_exe())
+		while (ft_strchr(parsed[i], '='))
 			i++;
-		}
-
-	}*/
+//envoyer le environment depuis ici en le creant avec le while 			
+		execute(head, parsed, 1);
+//		test_env_flags(head, parsed);
+	}
 //	else
 
 //	if (test_env_flags(head, parsed)) //enlever pour tester!!!!

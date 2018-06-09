@@ -29,36 +29,46 @@ static	int		ft_count_nb_env(t_env *lst)
 static	char	**making_env(t_env_head *head)
 {
 	char		**envi;
+	char		tmp[1096];
 	int			nb_env;
 	int			i;
 	t_env		*lst;
 
-	lst = head->next;
+	i = 0;
 	if (head->next == NULL)
 		return (NULL);
-	i = 0;
-	nb_env = ft_count_nb_env(lst);
-	ft_printf("nb_env >> %d\n", nb_env);
-	if (!(envi = (char**)malloc(sizeof(char) * (nb_env + 1))))
+	lst = head->next;
+	nb_env = ft_count_nb_env(head->next);
+	if (!(envi = (char**)malloc(sizeof(char*) * (nb_env + 1))))
 		return (NULL);
-	while (nb_env > 0)
+	while (lst)
 	{
-		if (lst->name)
-		{
-			envi[i] = ft_strdup(lst->name);
-			envi[i] = ft_realloc(envi[i], "=");
-		}
-		if (lst->data)
-			envi[i] = ft_realloc(envi[i], lst->data);
+		ft_bzero(tmp, 1096);
+		ft_strcat(tmp, lst->name);
+		ft_strcat(tmp, "=");
+		ft_strcat(tmp, lst->data);
+		envi[i] = ft_strdup(tmp);
 		i++;
 		lst = lst->next;
-		nb_env--;
 	}
 	envi[i] = NULL;
 	return	(envi);
 }
 
-void			execute(t_env_head *head, char **parsed)
+void			print(char **env)
+{
+	int			i;
+
+	i = 0;
+	ft_printf("\n\n");
+	while (env[i])
+	{
+		ft_printf("env >> %s\n", env[i]);
+		i++;
+	}
+}
+
+void			execute(t_env_head *head, char **parsed, int i)
 {
 	pid_t		pid;
 	char		*exe;
@@ -69,7 +79,8 @@ void			execute(t_env_head *head, char **parsed)
 	exe = NULL;
 	if (test_exe(head->next, parsed, &exe))
 	{
-//		environment = making_env(head); //a traiter
+		if (i == 0)
+			environment = making_env(head); //a traiter
 		pid = fork();
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
@@ -114,13 +125,13 @@ int		built(t_env_head **head, char **parsed)
 		}
 		return (environment(*head, parsed));
 	}
-	if (ft_strcmp(*parsed, "echo") == 0)
+	if (!ft_strcmp(*parsed, "echo"))
 		return (echo(*head, parsed));
-	if (ft_strcmp(*parsed, "cd") == 0)
+	if (!ft_strcmp(*parsed, "cd"))
 		return (cd(*head, parsed));
-	if (ft_strcmp(*parsed, "setenv") == 0)
+	if (!ft_strcmp(*parsed, "setenv"))
 		return (setenvi(*head, parsed));
-	if (ft_strcmp(*parsed, "unsetenv") == 0)
+	if (!ft_strcmp(*parsed, "unsetenv"))
 		return (unsetenvi(*head, parsed));
 	return (0);
 }
@@ -139,14 +150,14 @@ void	minishell(t_env_head **head)
 		ft_printf("$> ");
 		get_next_line(0, &line);
 		parsed = ft_split(line);
-		if (ft_strcmp(line, "exit") == 0)
+		if (!ft_strcmp(line, "exit") || !ft_strcmp(line, "\0"))
 		{
 			free(line);
 			ft_free_2char(&parsed);
 			break ;
 		}
 		if (built(head, parsed) == 0)
-			execute(*head, parsed);
+			execute(*head, parsed, 0);
 		free(line);
 		ft_free_2char(&parsed);
 	}
@@ -161,6 +172,7 @@ int				main(int ac, char **av, char **env)
 	(void)av;
 	if (!(head = (t_env_head*)malloc(sizeof(t_env_head))))
 		return (0);
+	shell_top();
 	info = ft_get_env(env);
 	head->next = info;
 	minishell(&head);

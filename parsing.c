@@ -39,7 +39,8 @@ char			**ft_split(char *str)
 	if (!str)
 		return (NULL);
 	nb_words = ft_nb(str);
-	s = (char**)malloc(sizeof(char*) * (nb_words + 1));
+	if (!(s = (char**)malloc(sizeof(char*) * (nb_words + 1))))
+		return (NULL);
 	while (str[i])
 	{
 		while (str[i] && (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'))

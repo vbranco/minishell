@@ -59,6 +59,11 @@ void			ft_add(t_env **s, t_env *add);
 //------------------------------------------
 
 /*
+**	MAIN.c
+*/
+void			execute(t_env_head *head, char **parsed, int i);
+
+/*
 **	BUILTINS.c
 */
 int				echo(t_env_head *head, char **parsed);
@@ -112,6 +117,7 @@ int				searching_on_env(t_env_head *head, char *looking);
 int				ft_error(char *error_message, char **parsed, int index);
 int				ft_count_args_shell(char **parsed);
 void			ft_get_index_flag(char **parsed, int *, int *flag);
+void			shell_top(void);
 
 
 #endif

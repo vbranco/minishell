@@ -39,7 +39,7 @@ int				ft_error(char *error_message, char **parsed, int index)
 	return (1);
 }
 
-int		ft_count_args_shell(char **parsed)
+int				ft_count_args_shell(char **parsed)
 {
 	int			i;
 	int			a;
@@ -55,7 +55,7 @@ int		ft_count_args_shell(char **parsed)
 	return (a);
 }
 
-void	ft_get_index_flag(char **parsed, int *i, int *flag)
+void			ft_get_index_flag(char **parsed, int *i, int *flag)
 {
 	int			a;
 
@@ -74,4 +74,10 @@ void	ft_get_index_flag(char **parsed, int *i, int *flag)
 		a++;
 	}
 	*i = a;
+}
+
+void		shell_top(void)
+{
+	ft_printf("\e[0m");
+	ft_printf("Welcome to Bsh\n");
 }

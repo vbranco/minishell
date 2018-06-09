@@ -154,10 +154,8 @@ int					test_exe(t_env *env, char **parsed, char **exe)
 	i = 0;
 	if (exec_in_dir(parsed, exe))
 	{
-		if (access(*exe, F_OK))
-			return (!(ft_error(CD_NO_FILE, &(*exe), 0)));
-		else if (access(*exe, X_OK))
-			return (!(ft_error(CD_DENIED, &(*exe), 0)));
+		if (access(*exe, F_OK) || access(*exe, X_OK))
+			return (0);
 		else
 			return (1);
 	}
