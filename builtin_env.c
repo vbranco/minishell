@@ -29,104 +29,71 @@ int			ft_print_env(t_env_head *head)
 	return (1);
 }
 
-int			test_env_flags(t_env_head *head, char **parsed)
+void			ft_make_var_info(char *s, char **var_name, char **var_data)
 {
-//	char	*tmp;
+	int			i;
 
-	if (parsed[1])
-	{
-		if (!ft_strcmp(parsed[1], "-i"))
-		{
-			if (access(parsed[2], X_OK))
-			{
-				ft_printf("1dans test_env_flags et c'est exe\n");
-				return (1);
-			}
-			else
-				ft_printf("2dans test_env_flags et c'est exe\n");
-//			if (searching_on_env(head->next, parsed[2]))
-		}
-
-	}
-//	free(tmp);
-	return (0);
+	i = 0;
+	while (s[i] && s[i] != '=')
+		i++;
+	*var_name = ft_strsub(s, 0, i);
+	*var_data = ft_strsub(s, i + 1, ft_strlen(s) - (i + 1));
 }
 
-int			environment(t_env_head *head, char **parsed)
+static	void	ft_env_error(char *s)
 {
-	int		i;
+	int			i;
 
-	i = 1; // a voir pour l'indice
-	//-----A GERER----
+	i = 0;
+	if (s[i] == '-')
+	{
+		while (s[i] && s[i] == '-')
+			i++;
+		ft_putstr_fd("env: illegal option -- ", 2);
+		ft_putendl_fd((s + i), 2);
+		ft_putendl_fd(ENV_USAGE, 2);
+	}
+	else
+	{
+		ft_putstr_fd("env: ", 2);
+		ft_putstr_fd(s, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+	}
+}
+
+int				environment(t_env_head *head, char **parsed)
+{
+	int			i;
+	t_env_head	*exe_head;
+	char		*var;
+	char		*data;
+	
+	if (!(exe_head = ft_initialise_head()))
+		return (1);
+	i = 1;
 	if (parsed[i] == NULL)
 		ft_print_env(head);
 	else if (!ft_strcmp(parsed[i], "-i"))
 	{
 		i++;
-		while (ft_strchr(parsed[i], '='))
-			i++;
-//envoyer le environment depuis ici en le creant avec le while 			
-		execute(head, parsed, 1);
-//		test_env_flags(head, parsed);
-	}
-//	else
-
-//	if (test_env_flags(head, parsed)) //enlever pour tester!!!!
-//		ft_printf("test_env_flags\n");
-//		return (0);
-//	ft_print_env(head);
-	return (1);
-}
-
-void			ft_updating_var(t_env_head *head, char *var, char *dir)
-{
-	t_env		*env;
-
-	env = head->next;
-	while (env)
-	{
-		if (!ft_strcmp(env->name, var))
-			break ;
-		env = env->next;
-	}
-	free(env->data);
-	env->data = ft_strdup(dir); 
-}
-
-void			ft_create_var(t_env_head *head, char *var, char *dir)
-{
-	t_env		*add;
-	t_env		*env;
-
-	add = ft_initialise();
-	add->name = ft_strdup(var);
-	add->data = ft_strdup(dir);
-	if (head->next != NULL)
-	{
-		env = head->next;
-		while (env)
+		if (parsed[i] != NULL)
 		{
-			if (env->next == NULL)
-				break ;
-			env = env->next;
+			while (parsed[i] && ft_strchr(parsed[i], '='))
+			{
+				ft_make_var_info(parsed[i], &var, &data);
+				ft_create_var(exe_head, var, data); 
+				free(var);
+				free(data);
+				i++;
+			}
 		}
-		env->next = add;
+		if (parsed[i] == NULL)
+			ft_print_env(exe_head);
+		else
+			execute(exe_head, parsed, i);
+		ft_dell(&exe_head);
 	}
 	else
-		head->next = add;
-}
-
-void			update_env(t_env_head *head, char *dir)
-{
-	char		p[1096];
-
-	getcwd(p, 1096);
-	if (searching_on_env(head, "OLDPWD"))
-		ft_updating_var(head, "OLDPWD", dir);
-	else
-		ft_create_var(head, "OLDPWD", p);
-	if (searching_on_env(head, "PWD"))
-		ft_updating_var(head, "PWD", p);
-	else
-		ft_create_var(head, "PWD", p);
+		ft_env_error(parsed[i]);
+	return (1);
 }

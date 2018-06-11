@@ -13,6 +13,16 @@ t_env		*ft_initialise(void)
 	return (env);
 }
 
+t_env_head		*ft_initialise_head(void)
+{
+	t_env_head	*head;
+
+	if (!(head = (t_env_head*)malloc(sizeof(t_env_head))))
+		return (NULL);
+	head->next = NULL;
+	return (head);
+}
+
 void		ft_add(t_env **s, t_env *add)
 {
 	t_env	*tmp;
@@ -52,58 +62,24 @@ void		ft_dell(t_env_head **head)
 
 }
 
-void		ft_get(t_env **s, char *s1, int i)
+void		ft_get_env(t_env_head *head, char **env)
 {
-	t_env	*new;
-
-	new = ft_initialise();
-	if (new == NULL)
-		return ;
-	new->name = ft_strsub(s1, 0, i);
-	new->data = ft_strsub(s1, i + 1, ft_strlen(s1) - (i + 1));
-	ft_add(s, new);
-}
-
-t_env		*update(t_env *current)
-{
-	t_env	*p;
-	t_env	*o;
-	char	pwd[1096];
-
-	p = ft_initialise();
-	if (current == NULL)
-	{
-		getcwd(pwd, 1096);
-		p->name = ft_strdup("PWD");
-		p->data = ft_strdup(pwd);
-		o = ft_initialise();
-		o->name = ft_strdup("OLDPWD");
-		o->data = ft_strdup(pwd);
-		p->next = o;
-	}
-	return (p);
-}
-
-t_env		*ft_get_env(char **env)
-{
-	t_env	*s;
 	int		i;
-	int		a;
+	char	*var;
+	char	*data;
 
-	s = NULL;
 	i = 0;
 	if (*env == NULL)
-		s = update(s);
+		update_env(head, NULL);
 	else
 	{
 		while (env[i])
 		{
-			a = 0;
-			while (env[i][a] && env[i][a] != '=')
-				a++;
-			ft_get(&s, env[i], a);
+			ft_make_var_info(env[i], &var, &data);
+			ft_create_var(head, var, data);
+			free(var);
+			free(data);
 			i++;
 		}
 	}
-	return (s);
 }

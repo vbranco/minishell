@@ -32,6 +32,7 @@
 # define ENV_VAR "setenv: Variable name must contain alphanumeric characters"
 # define UNSETENV_NO_ARG "unsetenv: not enough arguments"
 # define NO_CMD ": Command not found"
+# define ENV_USAGE "usage: env [-i] [name=value ...] [utility [argument ...]]"
 
 typedef struct		s_env
 {
@@ -49,7 +50,8 @@ typedef	struct		s_env_head
 **	ENV >> ft_initialise.c
 */
 t_env			*ft_initialise(void);
-t_env			*ft_get_env(char **env);
+t_env_head		*ft_initialise_head(void);
+void			ft_get_env(t_env_head *head, char **env);
 void			ft_dell(t_env_head **s);
 void			ft_add(t_env **s, t_env *add);
 
@@ -84,11 +86,9 @@ int				ft_count_signes(char *str, char c);
 **	BUILTIN_ENV.c
 */
 int				environment(t_env_head *head, char **parsed);
-void			update_env(t_env_head *head, char *dir);
 int				test_env_flags(t_env_head *head, char **parsed);
 int				ft_print_env(t_env_head *head);
-void			ft_updating_var(t_env_head *head, char *var, char *current);
-void			ft_create_var(t_env_head *head, char *var, char *dir);
+void			ft_make_var_info(char *s, char **var_name, char **var_data);
 
 /*
 **	BUILTIN_SETENV.c
@@ -103,7 +103,7 @@ int				unsetenvi(t_env_head *head, char **parsed);
 /*
 **	EXE.c
 */
-int				test_exe(t_env *env, char **parsed, char **exe);
+int				test_exe(t_env *env, char **parsed, int index, char **exe);
 
 /*
 **	PARSING.c
@@ -118,6 +118,13 @@ int				ft_error(char *error_message, char **parsed, int index);
 int				ft_count_args_shell(char **parsed);
 void			ft_get_index_flag(char **parsed, int *, int *flag);
 void			shell_top(void);
+
+/*
+**	TOOLS_ENV.c
+*/
+void			update_env(t_env_head *head, char *dir);
+void			ft_updating_var(t_env_head *head, char *var, char *current);
+void			ft_create_var(t_env_head *head, char *var, char *data);
 
 
 #endif

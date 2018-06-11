@@ -77,16 +77,14 @@ void			execute(t_env_head *head, char **parsed, int i)
 	environment = NULL;
 
 	exe = NULL;
-	if (test_exe(head->next, parsed, &exe))
+	if (test_exe(head->next, parsed, i, &exe))
 	{
-		if (i == 0)
-			environment = making_env(head); //a traiter
+		environment = making_env(head);
 		pid = fork();
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
 		if (pid == 0)
 		{
-			//penser a changer environment suivant le flag env -i
 			if (execve(exe, parsed, environment) == -1)//penser a gere le '~' EX: ls ~
 			{
 				ft_putstr_fd(parsed[0], 2);
@@ -106,7 +104,7 @@ void			execute(t_env_head *head, char **parsed, int i)
 	}
 	else
 	{
-		ft_putstr_fd(*parsed, 2);
+		ft_putstr_fd(parsed[i], 2);
 		ft_putendl_fd(NO_CMD, 2);
 		return ;
 	}
@@ -117,14 +115,7 @@ int		built(t_env_head **head, char **parsed)
 	if (*parsed == NULL)
 		return (1);
 	if (!ft_strcmp(*parsed, "env"))
-	{
-		if (!searching_on_env(*head, "PATH"))
-		{
-			ft_putendl_fd("env: Command not found", 2);
-			return (1);
-		}
 		return (environment(*head, parsed));
-	}
 	if (!ft_strcmp(*parsed, "echo"))
 		return (echo(*head, parsed));
 	if (!ft_strcmp(*parsed, "cd"))
@@ -147,7 +138,7 @@ void	minishell(t_env_head **head)
 	parsed = NULL;
 	while (101)
 	{
-		ft_printf("$> ");
+		ft_printf("\e[0m$> ");
 		get_next_line(0, &line);
 		parsed = ft_split(line);
 		if (!ft_strcmp(line, "exit") || !ft_strcmp(line, "\0"))
@@ -170,11 +161,10 @@ int				main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	if (!(head = (t_env_head*)malloc(sizeof(t_env_head))))
-		return (0);
+	if (!(head = ft_initialise_head()))
+		return (1);
 	shell_top();
-	info = ft_get_env(env);
-	head->next = info;
+	ft_get_env(head, env);
 	minishell(&head);
 	ft_dell(&head);
 	return (0);

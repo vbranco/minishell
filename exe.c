@@ -125,34 +125,34 @@ static	int			ft_count_p(char *s)
 	return (a);
 }
 
-static	int			exec_in_dir(char **parsed, char **exe)
+static	int			exec_in_dir(char **parsed, int index, char **exe)
 {
 	char			pwd[1096];
 	int				p;
 
 	p = 0;
-	if (*parsed[0] == '.')
+	if (*parsed[index] == '.')
 	{
 	//	ft_printf("parsed >> %s\n", *parsed);
-		p = ft_count_p(parsed[0]);
+		p = ft_count_p(parsed[index]);
 		getcwd(pwd, 1096);
-		*exe = get_prev_dir(parsed, pwd, 0);
+		*exe = get_prev_dir(parsed, pwd, index);
 	//	ft_printf("*exe >> %s\n", *exe);
-		*exe = ft_strjoin(*exe, &parsed[0][p]);
+		*exe = ft_strjoin(*exe, &parsed[index][p]);
 	//	ft_printf("apres *exe >> %s\n", *exe);
 		return (1);
 	}
 	return (0);
 }
 
-int					test_exe(t_env *env, char **parsed, char **exe)
+int					test_exe(t_env *env, char **parsed, int index, char **exe)
 {
 	char			**path;
 	char			*tmp;
 	int				i;
 
 	i = 0;
-	if (exec_in_dir(parsed, exe))
+	if (exec_in_dir(parsed, index, exe))
 	{
 		if (access(*exe, F_OK) || access(*exe, X_OK))
 			return (0);
