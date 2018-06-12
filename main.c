@@ -127,8 +127,6 @@ int		built(t_env_head **head, char **parsed)
 	return (0);
 }
 
-
-
 void	minishell(t_env_head **head)
 {
 	char	*line;
@@ -140,7 +138,8 @@ void	minishell(t_env_head **head)
 	{
 		ft_printf("\e[0m$> ");
 		get_next_line(0, &line);
-		parsed = ft_split(line);
+//		parsed = ft_split(line);
+		parsed = ft_parsed(*head, line);		
 		if (!ft_strcmp(line, "exit") || !ft_strcmp(line, "\0"))
 		{
 			free(line);

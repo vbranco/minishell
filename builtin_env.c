@@ -61,12 +61,32 @@ static	void	ft_env_error(char *s)
 	}
 }
 
+static	void	ft_env_flag_i(t_env_head *head, char **parsed, int i)
+{
+	char		*var;
+	char		*data;
+
+	if (parsed[i] != NULL)
+	{
+		while (parsed[i] && ft_strchr(parsed[i], '='))
+		{
+			ft_make_var_info(parsed[i], &var, &data);
+			ft_create_var(head, var, data);
+			free(var);
+			free(data);
+			i++;
+		}
+		if (parsed[i] == NULL)
+			ft_print_env(head);
+		else
+			execute(head, parsed, i);
+	}
+}
+
 int				environment(t_env_head *head, char **parsed)
 {
 	int			i;
 	t_env_head	*exe_head;
-	char		*var;
-	char		*data;
 	
 	if (!(exe_head = ft_initialise_head()))
 		return (1);
@@ -76,21 +96,7 @@ int				environment(t_env_head *head, char **parsed)
 	else if (!ft_strcmp(parsed[i], "-i"))
 	{
 		i++;
-		if (parsed[i] != NULL)
-		{
-			while (parsed[i] && ft_strchr(parsed[i], '='))
-			{
-				ft_make_var_info(parsed[i], &var, &data);
-				ft_create_var(exe_head, var, data); 
-				free(var);
-				free(data);
-				i++;
-			}
-		}
-		if (parsed[i] == NULL)
-			ft_print_env(exe_head);
-		else
-			execute(exe_head, parsed, i);
+		ft_env_flag_i(exe_head, parsed, i);
 		ft_dell(&exe_head);
 	}
 	else

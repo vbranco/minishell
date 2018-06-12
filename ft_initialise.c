@@ -59,7 +59,6 @@ void		ft_dell(t_env_head **head)
 	s = NULL;
 	free(*head);
 	head = NULL;
-
 }
 
 void		ft_get_env(t_env_head *head, char **env)

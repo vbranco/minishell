@@ -46,6 +46,18 @@ typedef	struct		s_env_head
 	struct s_env	*next;
 }					t_env_head;
 
+typedef	struct		s_pars
+{
+	char			*info;
+	struct s_pars	*next;
+}					t_pars;
+
+typedef struct		s_pars_head
+{
+	struct s_pars	*next;
+}					t_pars_head;
+
+
 /*
 **	ENV >> ft_initialise.c
 */
@@ -86,7 +98,6 @@ int				ft_count_signes(char *str, char c);
 **	BUILTIN_ENV.c
 */
 int				environment(t_env_head *head, char **parsed);
-int				test_env_flags(t_env_head *head, char **parsed);
 int				ft_print_env(t_env_head *head);
 void			ft_make_var_info(char *s, char **var_name, char **var_data);
 
@@ -109,6 +120,7 @@ int				test_exe(t_env *env, char **parsed, int index, char **exe);
 **	PARSING.c
 */
 char			**ft_split(char *line);
+char			**ft_parsed(t_env_head *head, char *line);
 
 /*
 **	TOOLS.c
