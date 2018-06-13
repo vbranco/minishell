@@ -13,19 +13,19 @@
 
 #include "mini.h"
 
-int				searching_on_env(t_env_head *head, char *looking)
+char			*searching_on_env(t_env_head *head, char *looking)
 {
 	t_env		*tmp;
 	if (head->next == NULL)
-		return (0);
+		return (NULL);
 	tmp = head->next;
 	while (tmp)
 	{
 		if (!ft_strcmp(tmp->name, looking))
-			return (1);
+			return (tmp->data);
 		tmp = tmp->next;
 	}
-	return (0);
+	return (NULL);
 }
 
 int				ft_error(char *error_message, char **parsed, int index)

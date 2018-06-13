@@ -48,7 +48,7 @@ typedef	struct		s_env_head
 
 typedef	struct		s_pars
 {
-	char			*info;
+	char			*get;
 	struct s_pars	*next;
 }					t_pars;
 
@@ -125,7 +125,7 @@ char			**ft_parsed(t_env_head *head, char *line);
 /*
 **	TOOLS.c
 */
-int				searching_on_env(t_env_head *head, char *looking);
+char			*searching_on_env(t_env_head *head, char *looking);
 int				ft_error(char *error_message, char **parsed, int index);
 int				ft_count_args_shell(char **parsed);
 void			ft_get_index_flag(char **parsed, int *, int *flag);

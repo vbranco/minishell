@@ -140,14 +140,15 @@ void	minishell(t_env_head **head)
 		get_next_line(0, &line);
 //		parsed = ft_split(line);
 		parsed = ft_parsed(*head, line);		
-		if (!ft_strcmp(line, "exit") || !ft_strcmp(line, "\0"))
+		if (!ft_strcmp(line, "exit"))// || !ft_strcmp(line, "\0"))
 		{
 			free(line);
 			ft_free_2char(&parsed);
 			break ;
 		}
-		if (built(head, parsed) == 0)
-			execute(*head, parsed, 0);
+		built(head, parsed);
+/*		if (built(head, parsed) == 0)
+			execute(*head, parsed, 0);*/
 		free(line);
 		ft_free_2char(&parsed);
 	}

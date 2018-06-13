@@ -55,26 +55,7 @@ char			**ft_split(char *str)
 	return (s);
 }
 
-static	void	ft_add_pars(t_pars_head *head, char *s)
-{
-	t_pars		*p;
-	t_pars		*tmp;
 
-	p = NULL;
-	if (!(p = (t_pars*)malloc(sizeof(t_pars))))
-		return ;
-	p->info = ft_strdup(s);
-	p->next = NULL;
-	tmp = head->next;
-	if (tmp == NULL)
-		head->next = p;
-	else
-	{
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = p;
-	}
-}
 
 static	t_pars_head	*ft_ini_pars_head(void)
 {
@@ -86,7 +67,7 @@ static	t_pars_head	*ft_ini_pars_head(void)
 	p->next = NULL;
 	return (p);
 }
-/*
+
 static	void	ft_p(t_pars_head *head)
 {
 	t_pars		*tmp;
@@ -94,63 +75,12 @@ static	void	ft_p(t_pars_head *head)
 	tmp = head->next;
 	while (tmp)
 	{
-		ft_printf(">>%s\n", tmp->info);
+		ft_printf("get>>%s\n", tmp->get);
 		tmp = tmp->next;
 	}
 }
-*/
-static	char	*ft_update_var_pars(t_env_head *head, char *looking)
-{
-	char		*ret;
-	t_env		*tmp;
 
-	tmp = head->next;
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->name, looking))
-			break ;
-		tmp = tmp->next;
-	}
-	ret = ft_strdup(tmp->data);
-	return (ret);
-}
-
-static	void	ft_update_pars(t_pars_head *head, t_env_head *s, int *i)
-{
-	t_pars		*tmp;
-
-	tmp = head->next;
-	if (tmp)
-	{
-		while (tmp)
-		{
-			if (tmp->info[0] == '~')
-			{
-				free(tmp->info);
-				if (searching_on_env(s, "HOME"))
-					tmp->info = ft_update_var_pars(s, "HOME");
-				else
-					tmp->info = NULL;
-			}
-			if (tmp->info[0] == '$')
-			{
-				if (searching_on_env(s, tmp->info + 1))
-				{
-					free(tmp->info);
-					tmp->info = ft_update_var_pars(s, tmp->info + 1);
-				}
-				else
-				{
-					free(tmp->info);
-					tmp->info = NULL;
-				}
-			}
-			tmp = tmp->next;
-		}
-	}
-}
-
-static	char	**ft_create_pars(t_pars_head *head, t_env_head *s, char **parsed)
+static	char	**ft_create_pars(t_pars_head *head)
 {
 	char		**ret;
 	int			i;
@@ -158,28 +88,29 @@ static	char	**ft_create_pars(t_pars_head *head, t_env_head *s, char **parsed)
 
 	i = 0;
 	ret = NULL;
-	while (parsed[i])
+	tmp = head->next;
+	if (!tmp)
+		return (NULL);
+	while (tmp)
 	{
-		ft_add_pars(head, parsed[i]);
-		i++;
+		if (tmp->get)
+			i++;
+		tmp = tmp->next;
 	}
-//	ft_p(head);
-	ft_update_pars(head, s, &i);
-//	ft_p(head);
 	if (!(ret = (char**)malloc(sizeof(char) * (i + 1))))
 		return (NULL);
+	ret[i] = NULL;
 	tmp = head->next;
 	i = 0;
 	while (tmp)
 	{
-		if (tmp->info != NULL)
+		if (tmp->get != NULL)
 		{
-			ret[i] = ft_strdup(tmp->info);
+			ret[i] = ft_strdup(tmp->get);
 			i++;
 		}
 		tmp = tmp->next;
 	}
-	ret[i] = NULL;
 	return (ret);
 }
 
@@ -192,15 +123,14 @@ static	void	ft_free_pars(t_pars_head **head)
 	while (s)
 	{
 		tmp = (s)->next;
-		if ((s)->info != NULL)
-			free((s)->info);
+		if ((s)->get != NULL)
+			free((s)->get);
 		free(s);
 		(s) = tmp;
 	}
 	s = NULL;
 	free(*head);
 	head = NULL;
-
 }
 
 //--a supp
@@ -215,26 +145,103 @@ void			ft_pi(char **p)
 	}
 }
 //--
+static	void	ft_add_pars(t_pars_head *head, char *s)
+{
+	t_pars		*p;
+	t_pars		*tmp;
+
+	p = NULL;
+	if (!(p = (t_pars*)malloc(sizeof(t_pars))))
+		return ;
+	p->get = ft_strdup(s);
+	free(s);
+	p->next = NULL;
+	tmp = head->next;
+	if (tmp == NULL)
+		head->next = p;
+	else
+	{
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = p;
+	}
+}
+
+static	void	ft_update_parse(t_env_head *start, t_pars_head *head)
+{
+	t_pars		*tmp;
+	char		*swap;
+
+	tmp = head->next;
+	if (!tmp)
+		return ;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->get, "~"))
+		{
+			swap = searching_on_env(start, "HOME");
+			free(tmp->get);
+			if (swap)
+				tmp->get = ft_strdup(swap);
+			else
+				tmp->get = NULL;
+		}
+		if (tmp->get[0] == '$')
+		{
+			swap = searching_on_env(start, tmp->get + 1);
+			free(tmp->get);
+			if (swap)
+				tmp->get = ft_strdup(swap);
+			else
+				tmp->get = NULL;
+		}
+		tmp = tmp->next;
+//		ft_printf("dans if ft_update_parse\n");
+	}
+}
+
+static	void	ft_create_parse_lst(t_env_head *env, t_pars_head *head, char *s)
+{
+	int			i;
+	int			start;
+	
+	i = 0;
+	while (s[i])
+	{
+		while (s[i] && (s[i] == ' ' || s[i] == '\n'))
+			i++;
+		start = i;
+		while (s[i] && s[i] != ' ' && s[i] != '\n')
+			i++;
+		ft_add_pars(head, ft_strsub(s, start, i - start));
+		while (s[i] && (s[i] == ' ' || s[i] == '\n'))
+			i++;
+	}
+//	ft_p(head);
+	ft_update_parse(env, head);
+//	ft_printf("apres update_parse\n");
+}
 
 char			**ft_parsed(t_env_head *start, char *line)
 {
-	char		**parsed;
 	t_pars_head	*head;
 	char		**ret;//tester sans
 
 	ret = NULL;
 	head = NULL;
+	if (!line)
+		return (NULL);
 	if (!(head = ft_ini_pars_head()))
 		return (NULL);
-	parsed = NULL;
-	parsed = ft_split(line);
-	if (parsed == NULL)
-		return (NULL);
+	ft_create_parse_lst(start, head, line);
+	ret = ft_create_pars(head);
+	ft_pi(ret);
+//	ft_p(head);
+//	ft_printf("\n\n");
 	//---prob a partir d'ici---
-	ret = ft_create_pars(head, start, parsed);
-	ft_pi(parsed);//debug
-	ft_free_2char(&parsed);
+//	ft_pi(parsed);//debug
+//	ret = ft_create_pars(head, start, parsed);
 	ft_free_pars(&head);
-	ft_pi(ret);//debug
+//	ft_pi(ret);//debug
 	return (ret);//tester return(ft_create_pars(head...)
 }
