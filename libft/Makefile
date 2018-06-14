@@ -29,7 +29,7 @@ SRCS	 = ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c \
 	   ft_lstdel.c ft_lstadd.c ft_lstiter.c ft_lstmap.c \
 	   ft_isblank.c ft_isupper.c ft_isxdigit.c ft_isspace.c ft_islower.c \
 	   ft_size_nb.c ft_reverse.c ft_count_words.c ft_realloc.c get_next_line.c \
-	   ft_strexpand.c ft_free_2char.c
+	   ft_strexpand.c ft_free_2char.c ft_split.c
 
 OBJ 	= $(addprefix build/, $(SRCS:.c=.o))
 

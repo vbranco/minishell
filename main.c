@@ -26,7 +26,15 @@ static	int		ft_count_nb_env(t_env *lst)
 	return (i + 1);
 }
 
-static	char	**making_env(t_env_head *head)
+static	void	ft_updating_last_cmd(t_env_head *head, char **parsed)
+{
+	t_env		*tmp;
+
+	tmp = head->next;
+//	if (!tmp)
+}
+
+static	char	**making_env(t_env_head *head, char *exe)
 {
 	char		**envi;
 	char		tmp[1096];
@@ -54,7 +62,7 @@ static	char	**making_env(t_env_head *head)
 	envi[i] = NULL;
 	return	(envi);
 }
-
+//--supp
 void			print(char **env)
 {
 	int			i;
@@ -67,7 +75,7 @@ void			print(char **env)
 		i++;
 	}
 }
-
+//-----
 void			execute(t_env_head *head, char **parsed, int i)
 {
 	pid_t		pid;
@@ -79,7 +87,7 @@ void			execute(t_env_head *head, char **parsed, int i)
 	exe = NULL;
 	if (test_exe(head->next, parsed, i, &exe))
 	{
-		environment = making_env(head);
+		environment = making_env(head, exe);
 		pid = fork();
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
@@ -112,7 +120,7 @@ void			execute(t_env_head *head, char **parsed, int i)
 
 int		built(t_env_head **head, char **parsed)
 {
-	if (*parsed == NULL)
+	if (parsed == NULL)
 		return (1);
 	if (!ft_strcmp(*parsed, "env"))
 		return (environment(*head, parsed));
@@ -138,7 +146,7 @@ void	minishell(t_env_head **head)
 	{
 		ft_printf("\e[0m$> ");
 		get_next_line(0, &line);
-//		parsed = ft_split(line);
+//while a rajouter ici au cas ou ';' pour gerer plusiers cmd || voir pour utiliser 3 dimensions dans le parsed		
 		parsed = ft_parsed(*head, line);		
 		if (!ft_strcmp(line, "exit"))// || !ft_strcmp(line, "\0"))
 		{
@@ -146,9 +154,11 @@ void	minishell(t_env_head **head)
 			ft_free_2char(&parsed);
 			break ;
 		}
-		built(head, parsed);
-/*		if (built(head, parsed) == 0)
-			execute(*head, parsed, 0);*/
+//-----------gerer-------------		
+//		if (parsed != NULL)
+//			ft_updating_last_cmd(*head, parsed);
+		if (built(head, parsed) == 0)
+			execute(*head, parsed, 0);
 		free(line);
 		ft_free_2char(&parsed);
 	}

@@ -59,18 +59,20 @@ typedef struct		s_pars_head
 
 
 /*
-**	ENV >> ft_initialise.c
+**	TOOLS_LST_ENV.c
 */
 t_env			*ft_initialise(void);
 t_env_head		*ft_initialise_head(void);
-void			ft_get_env(t_env_head *head, char **env);
+void			ft_add(t_env_head *head, t_env *add);
 void			ft_dell(t_env_head **s);
-void			ft_add(t_env **s, t_env *add);
+void			ft_get_env(t_env_head *head, char **env);
 
 /*
-**	DEBUG---------------------------------
+**	TOOLS_LST_PARSE.c
 */
-//------------------------------------------
+t_pars_head		*ft_initialise_pars_head(void);
+void			ft_free_pars(t_pars_head **head);
+void			ft_add_pars(t_pars_head *head, char *s);
 
 /*
 **	MAIN.c
@@ -119,7 +121,6 @@ int				test_exe(t_env *env, char **parsed, int index, char **exe);
 /*
 **	PARSING.c
 */
-char			**ft_split(char *line);
 char			**ft_parsed(t_env_head *head, char *line);
 
 /*

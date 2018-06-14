@@ -23,23 +23,23 @@ t_env_head		*ft_initialise_head(void)
 	return (head);
 }
 
-void		ft_add(t_env **s, t_env *add)
+void		ft_add(t_env_head *head, t_env *add)
 {
 	t_env	*tmp;
 
-	tmp = *s;
+	tmp = head->next;
 	if (tmp)
 	{
-		while (tmp->next)
+		while (tmp)
+		{
+			if (tmp->next == NULL)
+				break ;
 			tmp = tmp->next;
+		}
 		tmp->next = add;
-		add->next = NULL;
 	}
 	else
-	{
-		add->next = *s;
-		*s = add;
-	}
+		head->next = add;
 }
 
 void		ft_dell(t_env_head **head)
@@ -80,5 +80,6 @@ void		ft_get_env(t_env_head *head, char **env)
 			free(data);
 			i++;
 		}
+		update_env(head, NULL);
 	}
 }
