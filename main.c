@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/05 20:04:52 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/18 20:11:18 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,7 +25,8 @@ static	int		ft_count_nb_env(t_env *lst)
 	}
 	return (i + 1);
 }
-
+/*
+** en cours de dev
 static	void	ft_updating_last_cmd(t_env_head *head, char **parsed)
 {
 	t_env		*tmp;
@@ -33,7 +34,7 @@ static	void	ft_updating_last_cmd(t_env_head *head, char **parsed)
 	tmp = head->next;
 //	if (!tmp)
 }
-
+*/
 static	char	**making_env(t_env_head *head, char *exe)
 {
 	char		**envi;
@@ -76,6 +77,24 @@ void			print(char **env)
 	}
 }
 //-----
+
+void			execute_2(char *exe, char **parsed, char **environment, int i)
+{
+	if (execve(exe, parsed, environment) == -1)//penser a gere le '~' EX: ls ~
+	{
+		ft_putstr_fd(parsed[i], 2);//voir pour changer parsed[i] par exe
+		ft_putendl_fd(NO_CMD, 2);
+		exit(1);
+	}
+
+}
+
+void			ft_print_error_no_exe(char *s)
+{
+	ft_putstr_fd(s, 2);
+	ft_putendl_fd(NO_CMD, 2);
+}
+
 void			execute(t_env_head *head, char **parsed, int i)
 {
 	pid_t		pid;
@@ -83,7 +102,6 @@ void			execute(t_env_head *head, char **parsed, int i)
 	char		**environment;
 
 	environment = NULL;
-
 	exe = NULL;
 	if (test_exe(head->next, parsed, i, &exe))
 	{
@@ -92,30 +110,14 @@ void			execute(t_env_head *head, char **parsed, int i)
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
 		if (pid == 0)
-		{
-			if (execve(exe, parsed, environment) == -1)//penser a gere le '~' EX: ls ~
-			{
-				ft_putstr_fd(parsed[0], 2);
-				ft_putendl_fd(NO_CMD, 2);
-				ft_free_2char(&environment);
-				free(exe);
-				exit(1);
-			}
-		}
+			execute_2(exe, parsed, environment, i);
 		else
-		{
 			wait(&pid);
-			ft_free_2char(&environment);
-			free(exe);
-		}
-		return ;
+		ft_free_2char(&environment);
+		free(exe);
 	}
 	else
-	{
-		ft_putstr_fd(parsed[i], 2);
-		ft_putendl_fd(NO_CMD, 2);
-		return ;
-	}
+		ft_print_error_no_exe(parsed[i]);
 }
 
 int		built(t_env_head **head, char **parsed)
@@ -146,17 +148,14 @@ void	minishell(t_env_head **head)
 	{
 		ft_printf("\e[0m$> ");
 		get_next_line(0, &line);
-//while a rajouter ici au cas ou ';' pour gerer plusiers cmd || voir pour utiliser 3 dimensions dans le parsed		
-		parsed = ft_parsed(*head, line);		
+//while a rajouter ici au cas ou ';' pour gerer plusiers cmd || voir pour utiliser 3 dimensions dans le parsed
+		parsed = ft_parsed(*head, line);
 		if (!ft_strcmp(line, "exit"))// || !ft_strcmp(line, "\0"))
 		{
 			free(line);
 			ft_free_2char(&parsed);
 			break ;
 		}
-//-----------gerer-------------		
-//		if (parsed != NULL)
-//			ft_updating_last_cmd(*head, parsed);
 		if (built(head, parsed) == 0)
 			execute(*head, parsed, 0);
 		free(line);

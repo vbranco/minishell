@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/31 19:44:33 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/05 17:32:27 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/18 19:45:44 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -51,9 +51,9 @@ int				echo(t_env_head *head, char **parsed)
 		i++;
 	while (parsed[i])
 	{
-		if (parsed[i][0] == '$')
-			print_env(head, parsed[i]);
-		else
+//		if (parsed[i][0] == '$')
+//			print_env(head, parsed[i]);
+//		else
 			ft_printf("%s", parsed[i]);
 		i++;
 		if (parsed[i])

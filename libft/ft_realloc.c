@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/15 09:36:22 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/05/19 13:37:51 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/18 19:01:34 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,8 +18,10 @@ char	*ft_realloc(char *s1, char *s2)
 	char	*tmp;
 	int		len;
 
+	if (!s2)
+		return (s1);
 	len = ft_strlen(s1) + ft_strlen(s2) + 1;
-	tmp = ft_strnew(len);
+	tmp = ft_memalloc(len);
 	if (!tmp)
 		return (NULL);
 	if (s1)

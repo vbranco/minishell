@@ -1,10 +1,23 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   parsing.c                                        .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/06/18 16:46:05 by vbranco      #+#   ##    ##    #+#       */
+/*   Updated: 2018/06/18 20:11:17 by vbranco     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "mini.h"
 
 //--supp
 static	void	ft_p(t_pars_head *head)
 {
 	t_pars		*tmp;
-	
+
 	tmp = head->next;
 	while (tmp)
 	{
@@ -71,32 +84,80 @@ static	char	**ft_create_pars(t_pars_head *head)
 	}
 	return (ret);
 }
+//Travailler pour resoudre "$$" et "$$LESS"
+static	char	*ft_looking_for_var(t_env_head *start, char *s)
+{
+	int			i;
+	int			a;
+	char		*tmp;
+	char		*swap;
+	char		*search;
 
+	i = 0;
+	tmp = NULL;
+	while (s[i])
+	{
+		while (s[i] && s[i] != '$')
+		{
+//			if (s[i] == '$' && s[i + 1] == '$')
+//				i += 2;
+//			else
+				i++;
+		}
+		(!tmp) ? tmp = ft_strsub(s, 0, i) : 0;
+		i++;
+		if (!s[i])
+			break ;
+		a = i;
+		while (s[i] && s[i] != '$')
+			i++;
+		search = ft_strsub(s, a, i - a);
+		ft_printf("dans ft_looking_for_var || search >> %s\n", search);
+		swap = searching_on_env(start, search);
+		free(search);
+		tmp = ft_realloc(tmp, swap);
+	}
+	return (tmp);
+}
+//--------------------
+static	char	*ft_looking_for_home(t_env_head *start, char *s)
+{
+	char		*rest;
+	char		*swap;
+	char		*tmp;
 
+	rest = ft_strsub(s, 1, ft_strlen(s) - 1);
+	swap = searching_on_env(start, "HOME");
+	tmp = ft_strdup(swap);
+	tmp = ft_realloc(tmp, rest);
+	free(rest);
+	return (tmp);
+}
 
 static	void	ft_update_parse(t_env_head *start, t_pars_head *head)
 {
 	t_pars		*tmp;
-	char		*swap;
+	char		*rest;
 
 	tmp = head->next;
 	if (!tmp)
 		return ;
 	while (tmp)
 	{
-		if (!ft_strcmp(tmp->get, "~"))
+		if (tmp->get[0] == '~' && (tmp->get[1] == '/' || tmp->get[1] == '\0'))
 		{
-			swap = searching_on_env(start, "HOME");
+			rest = ft_strdup(tmp->get);
 			free(tmp->get);
-			tmp->get = ft_strdup(swap);
+			tmp->get = ft_looking_for_home(start, rest);
+			free(rest);
 		}
-		if (tmp->get && tmp->get[0] == '$' && tmp->get[1] != '\0')
+		if (ft_strchr(tmp->get, '$'))
 		{
-			swap = searching_on_env(start, tmp->get + 1);
+			rest = ft_strdup(tmp->get);
 			free(tmp->get);
-			tmp->get = ft_strdup(swap);
+			tmp->get = ft_looking_for_var(start, rest);
+			free(rest);
 		}
-//pas de free de swap car c'est un return de la liste des env
 		tmp = tmp->next;
 	}
 }
@@ -106,7 +167,7 @@ static	void	ft_create_parse_lst(t_env_head *env, t_pars_head *head, char *s)
 	int			i;
 	int			start;
 	char		*tmp;
-	
+
 	i = 0;
 	while (s[i])
 	{
@@ -127,7 +188,7 @@ static	void	ft_create_parse_lst(t_env_head *env, t_pars_head *head, char *s)
 char			**ft_parsed(t_env_head *start, char *line)
 {
 	t_pars_head	*head;
-	char		**ret;//tester sans
+	char		**ret;
 
 	ret = NULL;
 	head = NULL;
@@ -139,5 +200,5 @@ char			**ft_parsed(t_env_head *start, char *line)
 	ret = ft_create_pars(head);
 //	ft_p(head);
 	ft_free_pars(&head);
-	return (ret);//tester return(ft_create_pars(head...)
+	return (ret);
 }
