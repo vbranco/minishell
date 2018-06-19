@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/06/18 16:46:05 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/18 20:11:17 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/19 19:57:42 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -37,7 +37,7 @@ void			ft_pi(char **p)
 		i++;
 	}
 }
-//--
+//----------------------------------------------------------------
 
 static	int		ft_count_lst_elem(t_pars_head *head)
 {
@@ -82,9 +82,41 @@ static	char	**ft_create_pars(t_pars_head *head)
 		}
 		tmp = tmp->next;
 	}
+//	ft_pi(ret);
 	return (ret);
 }
+
 //Travailler pour resoudre "$$" et "$$LESS"
+static	void	ft_looking_for_special(char *s, int *i)
+{
+	int			a;
+
+	a = *i;
+	while (s[a])
+	{
+//		printf("s[a] >> %c\n", s[a]);
+		if (s[a] == '$' && !ft_isalpha(s[a + 1]))
+			a += 2;
+		else
+			break ;
+	}
+	*i = a;
+}
+
+static	char	*ft_get_before(char *s, int *i)
+{
+	char		*tmp;
+	int			a;
+
+	a = 0;
+	while (s[a] && s[a] != '$')
+		a++;
+	tmp = ft_memalloc(a + 1);
+	tmp = ft_strsub(s, 0, a);
+	*i = a;
+	return (tmp);
+}
+
 static	char	*ft_looking_for_var(t_env_head *start, char *s)
 {
 	int			i;
@@ -92,30 +124,30 @@ static	char	*ft_looking_for_var(t_env_head *start, char *s)
 	char		*tmp;
 	char		*swap;
 	char		*search;
+	char		*before;
 
 	i = 0;
 	tmp = NULL;
+	a = 0;
+	before = ft_get_before(s, &i);
 	while (s[i])
 	{
-		while (s[i] && s[i] != '$')
-		{
-//			if (s[i] == '$' && s[i + 1] == '$')
-//				i += 2;
-//			else
-				i++;
-		}
-		(!tmp) ? tmp = ft_strsub(s, 0, i) : 0;
-		i++;
-		if (!s[i])
-			break ;
+		ft_looking_for_special(s, &i);
+		printf("a >> %d\n", a);
 		a = i;
+		printf("a >> %d\n", a);
 		while (s[i] && s[i] != '$')
 			i++;
+		printf("i >> %d\n", i);
 		search = ft_strsub(s, a, i - a);
-		ft_printf("dans ft_looking_for_var || search >> %s\n", search);
-		swap = searching_on_env(start, search);
+		printf("search >> %s\n", search);
+		swap = searching_on_env(start, search + 1);
+		if (!swap && search)
+			tmp = ft_strdup(search);
 		free(search);
-		tmp = ft_realloc(tmp, swap);
+		if (swap)
+			tmp = ft_realloc(tmp, swap);
+		i++;
 	}
 	return (tmp);
 }
@@ -126,9 +158,14 @@ static	char	*ft_looking_for_home(t_env_head *start, char *s)
 	char		*swap;
 	char		*tmp;
 
-	rest = ft_strsub(s, 1, ft_strlen(s) - 1);
 	swap = searching_on_env(start, "HOME");
-	tmp = ft_strdup(swap);
+	if (swap)
+	{
+		tmp = ft_strdup(swap);
+		rest = ft_strsub(s, 1, ft_strlen(s) - 1);
+	}
+	else
+		return (NULL);
 	tmp = ft_realloc(tmp, rest);
 	free(rest);
 	return (tmp);
@@ -151,7 +188,7 @@ static	void	ft_update_parse(t_env_head *start, t_pars_head *head)
 			tmp->get = ft_looking_for_home(start, rest);
 			free(rest);
 		}
-		if (ft_strchr(tmp->get, '$'))
+		else if (ft_strchr(tmp->get, '$'))
 		{
 			rest = ft_strdup(tmp->get);
 			free(tmp->get);

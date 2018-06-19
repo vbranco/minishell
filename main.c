@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/18 20:11:18 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/19 19:57:42 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -80,7 +80,7 @@ void			print(char **env)
 
 void			execute_2(char *exe, char **parsed, char **environment, int i)
 {
-	if (execve(exe, parsed, environment) == -1)//penser a gere le '~' EX: ls ~
+	if (execve(exe, parsed, environment) == -1)
 	{
 		ft_putstr_fd(parsed[i], 2);//voir pour changer parsed[i] par exe
 		ft_putendl_fd(NO_CMD, 2);
