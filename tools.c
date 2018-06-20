@@ -16,7 +16,7 @@
 char			*searching_on_env(t_env_head *head, char *looking)
 {
 	t_env		*tmp;
-	if (head->next == NULL)
+	if (head->next == NULL || looking == NULL)
 		return (NULL);
 	tmp = head->next;
 	while (tmp)

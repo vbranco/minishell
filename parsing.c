@@ -94,9 +94,13 @@ static	void	ft_looking_for_special(char *s, int *i)
 	a = *i;
 	while (s[a])
 	{
-//		printf("s[a] >> %c\n", s[a]);
-		if (s[a] == '$' && !ft_isalpha(s[a + 1]))
-			a += 2;
+		if (s[a] == '$' && s[a + 1] != '\0')
+		{
+			if (!ft_isalpha(s[a + 1]))
+				a += 2;
+			else
+				break;
+		}
 		else
 			break ;
 	}
@@ -109,11 +113,15 @@ static	char	*ft_get_before(char *s, int *i)
 	int			a;
 
 	a = 0;
+	*i = 0;
+	tmp = NULL;
 	while (s[a] && s[a] != '$')
 		a++;
-	tmp = ft_memalloc(a + 1);
-	tmp = ft_strsub(s, 0, a);
-	*i = a;
+	if (a > 0)
+	{
+		tmp = ft_strsub(s, 0, a);
+		*i = a;
+	}
 	return (tmp);
 }
 
@@ -124,30 +132,24 @@ static	char	*ft_looking_for_var(t_env_head *start, char *s)
 	char		*tmp;
 	char		*swap;
 	char		*search;
-	char		*before;
 
-	i = 0;
-	tmp = NULL;
 	a = 0;
-	before = ft_get_before(s, &i);
+	tmp = ft_get_before(s, &i);
 	while (s[i])
 	{
 		ft_looking_for_special(s, &i);
-		printf("a >> %d\n", a);
 		a = i;
-		printf("a >> %d\n", a);
+		(s[i] == '$') ? i++ : 0;
 		while (s[i] && s[i] != '$')
 			i++;
-		printf("i >> %d\n", i);
-		search = ft_strsub(s, a, i - a);
-		printf("search >> %s\n", search);
-		swap = searching_on_env(start, search + 1);
-		if (!swap && search)
-			tmp = ft_strdup(search);
-		free(search);
-		if (swap)
-			tmp = ft_realloc(tmp, swap);
-		i++;
+		if (i > a)
+		{
+			search = ft_strsub(s, a, i - a);
+			swap = searching_on_env(start, search + 1);
+			(!swap && search) ? tmp = ft_realloc(tmp, search) : 0;
+			free(search);
+			(swap) ? tmp = ft_realloc(tmp, swap) : 0;
+		}
 	}
 	return (tmp);
 }
@@ -157,12 +159,20 @@ static	char	*ft_looking_for_home(t_env_head *start, char *s)
 	char		*rest;
 	char		*swap;
 	char		*tmp;
+	char		*doll;
 
 	swap = searching_on_env(start, "HOME");
 	if (swap)
 	{
 		tmp = ft_strdup(swap);
 		rest = ft_strsub(s, 1, ft_strlen(s) - 1);
+		if (ft_strchr(rest, '$'))
+		{
+			doll = ft_looking_for_var(start, rest);
+			free(rest);
+			rest = ft_strdup(doll);
+			free(doll);
+		}
 	}
 	else
 		return (NULL);
