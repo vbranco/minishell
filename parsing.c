@@ -82,7 +82,6 @@ static	char	**ft_create_pars(t_pars_head *head)
 		}
 		tmp = tmp->next;
 	}
-//	ft_pi(ret);
 	return (ret);
 }
 
@@ -133,7 +132,6 @@ static	char	*ft_looking_for_var(t_env_head *start, char *s)
 	char		*swap;
 	char		*search;
 
-	a = 0;
 	tmp = ft_get_before(s, &i);
 	while (s[i])
 	{
@@ -146,7 +144,8 @@ static	char	*ft_looking_for_var(t_env_head *start, char *s)
 		{
 			search = ft_strsub(s, a, i - a);
 			swap = searching_on_env(start, search + 1);
-			(!swap && search) ? tmp = ft_realloc(tmp, search) : 0;
+			(!swap && search && ft_isalpha(search[0])) ? 
+			tmp = ft_realloc(tmp, search) : 0;
 			free(search);
 			(swap) ? tmp = ft_realloc(tmp, swap) : 0;
 		}

@@ -137,6 +137,30 @@ int		built(t_env_head **head, char **parsed)
 	return (0);
 }
 
+static	void	print_prompt(t_env_head *head)
+{
+		char	*user;
+		char	current[1096];
+		int		len;
+
+		getcwd(current, 1096);
+		len = (int)ft_strlen(current) - 1;
+		while (len > 0)
+		{
+			if (current[len] == '/')
+			{
+				len++;
+				break ;
+			}
+			len--;
+		}
+		ft_printf("\e[0m");
+		user = searching_on_env(head, "USER");
+		if (user)
+			ft_printf("\xE2\x9C\x85  \e[1m\e[96m%s\e[0m:\e[32m%s\e[0m", user, current + len);
+		ft_printf(" $> ");
+}
+
 void	minishell(t_env_head **head)
 {
 	char	*line;
@@ -146,7 +170,7 @@ void	minishell(t_env_head **head)
 	parsed = NULL;
 	while (101)
 	{
-		ft_printf("\e[0m$> ");
+		print_prompt(*head);
 		get_next_line(0, &line);
 //while a rajouter ici au cas ou ';' pour gerer plusiers cmd || voir pour utiliser 3 dimensions dans le parsed
 		parsed = ft_parsed(*head, line);
