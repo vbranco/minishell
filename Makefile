@@ -16,7 +16,8 @@ NAME		=	minishell
 HEADER		=	mini.h
 
 FILENAMES	=	main.c tools_lst_env.c builtins.c builtin_cd.c builtin_cd2.c builtin_env.c builtin_setenv.c builtin_unsetenv.c parsing.c\
-	exe.c tools.c tools_env.c tools_lst_parse.c head_prompt.c
+	exe.c tools.c tools_env.c tools_lst_parse.c head_prompt.c tools_mini.c \
+	tools_cd.c tools_exe.c tools_parsing.c
 
 SOURCES		=	$(addprefix ./, $(FILENAMES))
 

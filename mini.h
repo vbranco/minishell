@@ -77,7 +77,7 @@ void			ft_add_pars(t_pars_head *head, char *s);
 /*
 **	MAIN.c
 */
-void			execute(t_env_head *head, char **parsed, int i);
+void			minishell(t_env_head *head);
 
 /*
 **	BUILTINS.c
@@ -122,6 +122,8 @@ int				test_exe(t_env *env, char **parsed, int index, char **exe);
 **	PARSING.c
 */
 char			**ft_parsed(t_env_head *head, char *line);
+void			ft_looking_for_special(char *s, int *i);
+
 
 /*
 **	TOOLS.c
@@ -137,6 +139,38 @@ void			ft_get_index_flag(char **parsed, int *, int *flag);
 void			update_env(t_env_head *head, char *dir);
 void			ft_updating_var(t_env_head *head, char *var, char *current);
 void			ft_create_var(t_env_head *head, char *var, char *data);
+
+/*
+**	TOOLS_MINI.c
+*/
+int				ft_count_nb_env(t_env *lst);
+char			**making_env(t_env_head *head, char *exe);
+void			ft_print_error_no_exe(char *s);
+void			execute(t_env_head *head, char **parsed, int i);
+void			execute_2(char *exe, char **parsed, char **env, int i);
+
+/*
+**	TOOLS_CD.c
+*/
+char			*get_dir_from_env(t_env *env, char *looking, char **err_mes);
+char			*get_stat(char **parsed, int i, int flag, char *pwd);
+int				looking_stat(char *dir);
+
+/*
+**	TOOLS_EXE.c
+*/
+int				exec_in_dir(char **parsed, int index, char **exe);
+char			*path_exist(t_env *env);
+char			*making_path(char *s1, char *s2, int i);
+int				inside_dir(char *path_dir, char *parsed, char **ret);
+int				ft_count_p(char *s);
+
+/*
+**	TOOLS_PARSING.c
+*/
+void			ft_create_parse_lst(t_env_head *env, t_pars_head *h, char *s);
+
+
 
 /*
 **	HEAD_PROMPT.c
