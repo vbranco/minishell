@@ -46,11 +46,6 @@ static int	test_var(char *s)
 
 int			setenvi(t_env_head *head, char **parsed)
 {
-	t_env	*add;
-	t_env	*tmp;
-
-	add = NULL;
-	tmp = head->next;
 	if (parsed[1] == NULL)
 		return (ft_print_env(head));
 	else if (ft_count_args(parsed) > 3)
@@ -60,9 +55,13 @@ int			setenvi(t_env_head *head, char **parsed)
 	else
 	{
 		if (searching_on_env(head, parsed[1]))//penser a changer parsed[1] par un parsed[i] car des flags peuvent intervenir
+		{
 			ft_updating_var(head, parsed[1], parsed[2]);
+		}
 		else
+		{
 			ft_create_var(head, parsed[1], parsed[2]);
+		}
 	}
 	return (1);
 }

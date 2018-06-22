@@ -75,11 +75,3 @@ void			ft_get_index_flag(char **parsed, int *i, int *flag)
 	}
 	*i = a;
 }
-
-void		shell_top(void)
-{
-	char	*top = "********************\n*------------------*\n*||   \e[31mvbranco\e[0m    ||*\n*------------------*\n********************\n";
-	ft_printf("\e[0m");
-	ft_printf("Welcome to Bsh\n");
-	ft_printf("%s", top);
-}

@@ -88,14 +88,14 @@ int				environment(t_env_head *head, char **parsed)
 	int			i;
 	t_env_head	*exe_head;
 	
-	if (!(exe_head = ft_initialise_head()))
-		return (1);
 	i = 1;
 	if (parsed[i] == NULL)
 		ft_print_env(head);
 	else if (!ft_strcmp(parsed[i], "-i"))
 	{
 		i++;
+		if (!(exe_head = ft_initialise_head()))
+			return (1);
 		ft_env_flag_i(exe_head, parsed, i);
 		ft_dell(&exe_head);
 	}

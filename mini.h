@@ -130,7 +130,6 @@ char			*searching_on_env(t_env_head *head, char *looking);
 int				ft_error(char *error_message, char **parsed, int index);
 int				ft_count_args_shell(char **parsed);
 void			ft_get_index_flag(char **parsed, int *, int *flag);
-void			shell_top(void);
 
 /*
 **	TOOLS_ENV.c
@@ -139,5 +138,10 @@ void			update_env(t_env_head *head, char *dir);
 void			ft_updating_var(t_env_head *head, char *var, char *current);
 void			ft_create_var(t_env_head *head, char *var, char *data);
 
+/*
+**	HEAD_PROMPT.c
+*/
+void			shell_top(void);
+void			print_prompt(t_env_head *head);
 
 #endif
