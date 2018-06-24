@@ -13,16 +13,6 @@
 
 #include "mini.h"
 
-/*
-** en cours de dev
-static	void	ft_updating_last_cmd(t_env_head *head, char **parsed)
-{
-	t_env		*tmp;
-
-	tmp = head->next;
-//	if (!tmp)
-}
-*/
 //--supp
 void			print(char **env)
 {
@@ -42,6 +32,13 @@ int		built(t_env_head *head, char **parsed)
 {
 	if (parsed == NULL)
 		return (1);
+	else
+	{
+		if (searching_on_env(head, "_"))
+			ft_updating_var(head, "_", *parsed);
+		else
+			ft_create_var(head, "_", *parsed);
+	}
 	if (!ft_strcmp(*parsed, "env"))
 		return (environment(head, parsed));
 	if (!ft_strcmp(*parsed, "echo"))
@@ -55,19 +52,64 @@ int		built(t_env_head *head, char **parsed)
 	return (0);
 }
 
-void	minishell(t_env_head *head)
+static	int		g_line(char **line)
 {
-	char	*line;
-	char	**parsed;
+	char		buf[SIZE];
+	int			ret;
+	char		*tmp;
+	char		*test;
+	int			i;
+	char		*swap;
+
+	if (!line || (read(0, buf, 0) == -1))
+		return (-1);
+	tmp = ft_strnew(SIZE);
+	while ((ret = read(0, buf, SIZE)))
+	{
+		i = 0;
+		buf[ret] = '\0';
+		test = ft_strdup(buf);
+		if ((i = (int)ft_strchr(test, '\n')))
+		{
+//			printf("i >> %d\n", i - (int)test);
+//			printf("test[i] >> %c", test[i - (int)test]);
+			swap = ft_strsub(test, 0, i - (int)test);
+			tmp = ft_realloc(tmp, swap);
+//			free(test);
+//			free(swap);
+			break ;
+		}
+		else
+		{
+			tmp = ft_realloc(tmp, test);
+//			free(test);
+		}
+	}
+	printf("tmp > %s\n", tmp);
+	*line = tmp;
+//	*line = ft_strdup(tmp);
+//	free(tmp);
+//	printf("a la fin de g_line\n");
+	return (1);
+}
+
+void			minishell(t_env_head *head)
+{
+	char		*line;
+	char		**parsed;
 
 	line = NULL;
 	parsed = NULL;
 	while (101)
 	{
 		print_prompt(head);
-		get_next_line(0, &line);
+//		get_next_line(0, &line);//modifier
+		g_line(&line);
+		printf("juste apres g_line dans while minishell\n");
+		printf("line >> %s\n", line);//supprimer
+//		free(line);//supprimer
 //while a rajouter ici au cas ou ';' pour gerer plusiers cmd || voir pour utiliser 3 dimensions dans le parsed
-		parsed = ft_parsed(head, line);
+/*		parsed = ft_parsed(head, line);
 		if (!ft_strcmp(line, "exit"))// || !ft_strcmp(line, "\0"))
 		{
 			free(line);
@@ -77,7 +119,7 @@ void	minishell(t_env_head *head)
 		if (built(head, parsed) == 0)
 			execute(head, parsed, 0);
 		free(line);
-		ft_free_2char(&parsed);
+		ft_free_2char(&parsed);*/
 	}
 }
 

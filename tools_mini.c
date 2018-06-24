@@ -42,21 +42,19 @@ char	**making_env(t_env_head *head, char *exe)
 	return	(envi);
 }
 
-void			ft_print_error_no_exe(char *s)
+static	void	ft_err_no_cmd(char *s)
 {
-	ft_putstr_fd(s, 2);
-	ft_putendl_fd(NO_CMD, 2);
+		ft_putstr_fd(s, 2);
+		ft_putendl_fd(NO_CMD, 2);
 }
 
 void			execute_2(char *exe, char **parsed, char **environment, int i)
 {
 	if (execve(exe, parsed, environment) == -1)
 	{
-		ft_putstr_fd(parsed[i], 2);//voir pour changer parsed[i] par exe
-		ft_putendl_fd(NO_CMD, 2);
+		ft_err_no_cmd(parsed[i]);
 		exit(1);
 	}
-
 }
 
 void			execute(t_env_head *head, char **parsed, int i)
@@ -69,6 +67,10 @@ void			execute(t_env_head *head, char **parsed, int i)
 	exe = NULL;
 	if (test_exe(head->next, parsed, i, &exe))
 	{
+		if (searching_on_env(head, "_"))
+			ft_updating_var(head, "_", exe);
+		else
+			ft_create_var(head, "_", exe);
 		environment = making_env(head, exe);
 		pid = fork();
 		if (pid < 0)
@@ -81,5 +83,5 @@ void			execute(t_env_head *head, char **parsed, int i)
 		free(exe);
 	}
 	else
-		ft_print_error_no_exe(parsed[i]);
+		ft_err_no_cmd(parsed[i]);
 }

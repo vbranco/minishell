@@ -29,23 +29,11 @@ static	int			try_exe_without_path(char *path, char **exe)
 	return (0);
 }
 
-int					test_exe(t_env *env, char **parsed, int index, char **exe)
+static	int			not_in_exe_dir(char **path, char **parsed, char **exe)
 {
-	char			**path;
-	char			*tmp;
 	int				i;
 
 	i = 0;
-	if (exec_in_dir(parsed, index, exe))
-	{
-		if (access(*exe, F_OK) || access(*exe, X_OK))
-			return (0);
-		else
-			return (1);
-	}
-	tmp = path_exist(env);
-	path = ft_strsplit(tmp, ':');
-	free(tmp);
 	if (path == NULL)
 		return (try_exe_without_path(*parsed, exe));
 	else
@@ -60,6 +48,27 @@ int					test_exe(t_env *env, char **parsed, int index, char **exe)
 			i++;
 		}
 	}
+	return (0);
+}
+
+int					test_exe(t_env *env, char **parsed, int index, char **exe)
+{
+	char			**path;
+	char			*tmp;
+	int				i;
+
+	i = exec_in_dir(parsed, index, exe);
+	if (i == 1)
+		return (1);
+	else if (i == -1)
+		return (0);
+	i = 0;
+	tmp = path_exist(env);
+	path = ft_strsplit(tmp, ':');
+	free(tmp);
+	i = not_in_exe_dir(path, parsed, exe);
+	if (i == 1)
+		return (1);
 	ft_free_2char(&path);
 	return (0);
 }

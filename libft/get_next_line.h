@@ -32,7 +32,5 @@ typedef	struct	s_getch
 }				t_getch;
 
 int				get_next_line(const int fd, char **line);
-//t_getch			*set_getch(const int fd);
-//t_list			*tog_lst(t_list **lst, const int fd);
 
 #	endif

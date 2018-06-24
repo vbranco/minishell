@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <signal.h>
 
+# define SIZE 5 //avec le g_line du main.c || verifier si up ou pas
 # define CD_TOO_ARGS "cd: too many arguments"
 # define CD_NO_FILE "cd: no such file or directory: "
 # define CD_BAD_FD "cd: bad file descriptor: "
@@ -145,7 +146,6 @@ void			ft_create_var(t_env_head *head, char *var, char *data);
 */
 int				ft_count_nb_env(t_env *lst);
 char			**making_env(t_env_head *head, char *exe);
-void			ft_print_error_no_exe(char *s);
 void			execute(t_env_head *head, char **parsed, int i);
 void			execute_2(char *exe, char **parsed, char **env, int i);
 
