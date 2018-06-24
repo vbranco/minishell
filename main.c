@@ -75,20 +75,20 @@ static	int		g_line(char **line)
 //			printf("test[i] >> %c", test[i - (int)test]);
 			swap = ft_strsub(test, 0, i - (int)test);
 			tmp = ft_realloc(tmp, swap);
-//			free(test);
-//			free(swap);
+			free(test);
+			free(swap);
 			break ;
 		}
 		else
 		{
 			tmp = ft_realloc(tmp, test);
-//			free(test);
+			free(test);
 		}
 	}
 	printf("tmp > %s\n", tmp);
-	*line = tmp;
-//	*line = ft_strdup(tmp);
-//	free(tmp);
+//	*line = tmp;
+	*line = ft_strdup(tmp);
+	free(tmp);
 //	printf("a la fin de g_line\n");
 	return (1);
 }
@@ -105,11 +105,11 @@ void			minishell(t_env_head *head)
 		print_prompt(head);
 //		get_next_line(0, &line);//modifier
 		g_line(&line);
-		printf("juste apres g_line dans while minishell\n");
+//		printf("juste apres g_line dans while minishell\n");
 		printf("line >> %s\n", line);//supprimer
 //		free(line);//supprimer
 //while a rajouter ici au cas ou ';' pour gerer plusiers cmd || voir pour utiliser 3 dimensions dans le parsed
-/*		parsed = ft_parsed(head, line);
+		parsed = ft_parsed(head, line);
 		if (!ft_strcmp(line, "exit"))// || !ft_strcmp(line, "\0"))
 		{
 			free(line);
@@ -119,7 +119,7 @@ void			minishell(t_env_head *head)
 		if (built(head, parsed) == 0)
 			execute(head, parsed, 0);
 		free(line);
-		ft_free_2char(&parsed);*/
+		ft_free_2char(&parsed);
 	}
 }
 
