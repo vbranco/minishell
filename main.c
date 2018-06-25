@@ -83,14 +83,17 @@ void			minishell(t_env_head *head)
 		print_prompt(head);
 		line = g_line();
 		parsed = ft_parsed(head, line);
-		if (parsed && !ft_strcmp(*parsed, "exit"))// || !ft_strcmp(line, "\0"))
+		if (parsed && *parsed)
 		{
-			free(line);
-			ft_free_2char(&parsed);
-			break ;
+			if (parsed && !ft_strcmp(*parsed, "exit"))// || !ft_strcmp(line, "\0"))
+			{
+				free(line);
+				ft_free_2char(&parsed);
+				break ;
+			}
+			if (built(head, parsed) == 0)
+				execute(head, parsed, 0);
 		}
-		if (built(head, parsed) == 0)
-			execute(head, parsed, 0);
 		free(line);
 		ft_free_2char(&parsed);
 	}
