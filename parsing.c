@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/06/18 16:46:05 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/19 19:57:42 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/25 19:34:31 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -21,7 +21,7 @@ static	void	ft_p(t_pars_head *head)
 	tmp = head->next;
 	while (tmp)
 	{
-		ft_printf("dans ft_p get>>%s\n", tmp->get);
+		ft_printf("dans ft_p get>> ||%s||\n", tmp->get);
 		tmp = tmp->next;
 	}
 }
@@ -118,8 +118,8 @@ char			**ft_parsed(t_env_head *start, char *line)
 	if (!(head = ft_initialise_pars_head()))
 		return (NULL);
 	ft_create_parse_lst(start, head, line);
-	ret = ft_create_pars(head);
-//	ft_p(head);
+	if (head->next)
+		ret = ft_create_pars(head);
 	ft_free_pars(&head);
 	return (ret);
 }

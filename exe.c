@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/28 19:46:28 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/04 17:10:47 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/25 20:10:11 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -61,7 +61,7 @@ int					test_exe(t_env *env, char **parsed, int index, char **exe)
 	if (i == 1)
 		return (1);
 	else if (i == -1)
-		return (0);
+		return (-1);
 	i = 0;
 	tmp = path_exist(env);
 	path = ft_strsplit(tmp, ':');

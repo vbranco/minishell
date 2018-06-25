@@ -111,16 +111,18 @@ void	ft_create_parse_lst(t_env_head *env, t_pars_head *head, char *s)
 	i = 0;
 	while (s[i])
 	{
-		while (s[i] && (s[i] == ' ' || s[i] == '\n'))
+		while (s[i] && (s[i] == ' ' || s[i] == '\n' || s[i] == '\t'))
 			i++;
 		start = i;
-		while (s[i] && s[i] != ' ' && s[i] != '\n')
+		while (s[i] && s[i] != ' ' && s[i] != '\n' && s[i] != '\t')
 			i++;
-		tmp = ft_strsub(s, start, i - start);
-		ft_add_pars(head, tmp);
-		free(tmp);
-		while (s[i] && (s[i] == ' ' || s[i] == '\n'))
-			i++;
+		if (i > start)
+		{
+			tmp = ft_strsub(s, start, i - start);
+			ft_add_pars(head, tmp);
+			free(tmp);
+		}
 	}
-	ft_update_parse(env, head);
+	if (head->next)
+		ft_update_parse(env, head);
 }

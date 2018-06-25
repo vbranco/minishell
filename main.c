@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/19 19:57:42 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/25 20:10:12 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -52,45 +52,23 @@ int		built(t_env_head *head, char **parsed)
 	return (0);
 }
 
-static	int		g_line(char **line)
+static	char	*g_line(void)
 {
 	char		buf[SIZE];
 	int			ret;
 	char		*tmp;
-	char		*test;
-	int			i;
-	char		*swap;
 
-	if (!line || (read(0, buf, 0) == -1))
-		return (-1);
-	tmp = ft_strnew(SIZE);
+	if ((read(0, buf, 0) == -1))
+		return (NULL);
+	tmp = ft_memalloc(SIZE + 1);
 	while ((ret = read(0, buf, SIZE)))
 	{
-		i = 0;
 		buf[ret] = '\0';
-		test = ft_strdup(buf);
-		if ((i = (int)ft_strchr(test, '\n')))
-		{
-//			printf("i >> %d\n", i - (int)test);
-//			printf("test[i] >> %c", test[i - (int)test]);
-			swap = ft_strsub(test, 0, i - (int)test);
-			tmp = ft_realloc(tmp, swap);
-			free(test);
-			free(swap);
+		if (buf[0] == '\n')
 			break ;
-		}
-		else
-		{
-			tmp = ft_realloc(tmp, test);
-			free(test);
-		}
+		tmp = ft_realloc(tmp, buf);
 	}
-	printf("tmp > %s\n", tmp);
-//	*line = tmp;
-	*line = ft_strdup(tmp);
-	free(tmp);
-//	printf("a la fin de g_line\n");
-	return (1);
+	return (tmp);
 }
 
 void			minishell(t_env_head *head)
@@ -103,14 +81,9 @@ void			minishell(t_env_head *head)
 	while (101)
 	{
 		print_prompt(head);
-//		get_next_line(0, &line);//modifier
-		g_line(&line);
-//		printf("juste apres g_line dans while minishell\n");
-		printf("line >> %s\n", line);//supprimer
-//		free(line);//supprimer
-//while a rajouter ici au cas ou ';' pour gerer plusiers cmd || voir pour utiliser 3 dimensions dans le parsed
+		line = g_line();
 		parsed = ft_parsed(head, line);
-		if (!ft_strcmp(line, "exit"))// || !ft_strcmp(line, "\0"))
+		if (parsed && !ft_strcmp(*parsed, "exit"))// || !ft_strcmp(line, "\0"))
 		{
 			free(line);
 			ft_free_2char(&parsed);
@@ -122,6 +95,14 @@ void			minishell(t_env_head *head)
 		ft_free_2char(&parsed);
 	}
 }
+//--------------------------------------
+/*
+ *	tester avec: espace "entre"
+ *	espace tab (cmd) espace tab espace (option)
+ *	exit 12 et exit 12354646adsafafg
+ *	chmod -x ./minishell et faire un ./minishell
+ *	penser a enlever les droits sur PATH et tester pour voir is Permission denied
+*/
 
 int				main(int ac, char **av, char **env)
 {

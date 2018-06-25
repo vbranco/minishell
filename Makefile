@@ -6,7 +6,7 @@
 #    By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/03/07 17:08:49 by vbranco      #+#   ##    ##    #+#        #
-#    Updated: 2018/06/18 16:45:44 by vbranco     ###    #+. /#+    ###.fr      #
+#    Updated: 2018/06/25 19:16:12 by vbranco     ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -31,7 +31,7 @@ LIB_LNK		=	-L $(L_FT) -l ft
 
 LIB_INC		=	-I $(L_FT)/libft.h
 
-LAGS		=	-Wall -Wextra -Werror -g
+LAGS		=	-Wall -Wextra -Werror -g #penser a enlever le -g
 
 .PHONY: all clean fclean re
 

@@ -42,17 +42,17 @@ char	**making_env(t_env_head *head, char *exe)
 	return	(envi);
 }
 
-static	void	ft_err_no_cmd(char *s)
+static	void	ft_err(char *s, char *err)
 {
 		ft_putstr_fd(s, 2);
-		ft_putendl_fd(NO_CMD, 2);
+		ft_putendl_fd(err, 2);
 }
 
 void			execute_2(char *exe, char **parsed, char **environment, int i)
 {
 	if (execve(exe, parsed, environment) == -1)
 	{
-		ft_err_no_cmd(parsed[i]);
+		ft_err(parsed[i], "execve ERROR");
 		exit(1);
 	}
 }
@@ -62,10 +62,12 @@ void			execute(t_env_head *head, char **parsed, int i)
 	pid_t		pid;
 	char		*exe;
 	char		**environment;
+	int			a;
 
 	environment = NULL;
 	exe = NULL;
-	if (test_exe(head->next, parsed, i, &exe))
+	a = test_exe(head->next, parsed, i, &exe);
+	if (a > 0)
 	{
 		if (searching_on_env(head, "_"))
 			ft_updating_var(head, "_", exe);
@@ -82,6 +84,8 @@ void			execute(t_env_head *head, char **parsed, int i)
 		ft_free_2char(&environment);
 		free(exe);
 	}
+	else if (a == -1)
+		ft_err(parsed[i], ": Permission denied");
 	else
-		ft_err_no_cmd(parsed[i]);
+		ft_err(parsed[i], NO_CMD);
 }

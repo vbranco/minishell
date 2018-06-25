@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:17 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/19 19:57:45 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/25 20:10:13 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -23,7 +23,7 @@
 # include <sys/wait.h>
 # include <signal.h>
 
-# define SIZE 5 //avec le g_line du main.c || verifier si up ou pas
+# define SIZE 1
 # define CD_TOO_ARGS "cd: too many arguments"
 # define CD_NO_FILE "cd: no such file or directory: "
 # define CD_BAD_FD "cd: bad file descriptor: "

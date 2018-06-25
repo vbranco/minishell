@@ -30,6 +30,11 @@ int					exec_in_dir(char **parsed, int index, char **exe)
 		*exe = ft_strjoin(*exe, &parsed[index][p]);
 		if (access(*exe, F_OK) || access(*exe, X_OK))
 		{
+			if (access(*exe, F_OK))
+			{
+				free(*exe);
+				return (-2);
+			}
 			free(*exe);
 			return (-1);
 		}
