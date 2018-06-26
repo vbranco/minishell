@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:17 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/25 20:10:13 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/26 17:23:20 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -118,6 +118,7 @@ int				unsetenvi(t_env_head *head, char **parsed);
 **	EXE.c
 */
 int				test_exe(t_env *env, char **parsed, int index, char **exe);
+int				ft_teste_file_exe(char **exe);
 
 /*
 **	PARSING.c

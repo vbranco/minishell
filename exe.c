@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/28 19:46:28 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/25 20:10:11 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/26 17:23:18 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -51,12 +51,30 @@ static	int			not_in_exe_dir(char **path, char **parsed, char **exe)
 	return (0);
 }
 
+int					ft_teste_file_exe(char **exe)
+{
+	if (access(*exe, F_OK) || access(*exe, X_OK))
+	{
+		if (access(*exe, F_OK))
+		{
+			free(*exe);
+			return (-2);
+		}
+		free(*exe);
+		return (-1);
+	}
+	return (1);
+}
+
 int					test_exe(t_env *env, char **parsed, int index, char **exe)
 {
 	char			**path;
 	char			*tmp;
 	int				i;
 
+//---------
+//penser a gerer les PATH = NON /bin/ls
+//et les trucs du main
 	i = exec_in_dir(parsed, index, exe);
 	if (i == 1)
 		return (1);
@@ -68,7 +86,7 @@ int					test_exe(t_env *env, char **parsed, int index, char **exe)
 	free(tmp);
 	i = not_in_exe_dir(path, parsed, exe);
 	if (i == 1)
-		return (1);
+		return (ft_teste_file_exe(exe));
 	ft_free_2char(&path);
 	return (0);
 }

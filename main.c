@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/25 20:10:12 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/26 17:23:19 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -68,6 +68,8 @@ static	char	*g_line(void)
 			break ;
 		tmp = ft_realloc(tmp, buf);
 	}
+	if (ret == 0)
+		tmp = ft_strdup("exit");
 	return (tmp);
 }
 
@@ -85,7 +87,7 @@ void			minishell(t_env_head *head)
 		parsed = ft_parsed(head, line);
 		if (parsed && *parsed)
 		{
-			if (parsed && !ft_strcmp(*parsed, "exit"))// || !ft_strcmp(line, "\0"))
+			if (parsed && !ft_strcmp(*parsed, "exit"))
 			{
 				free(line);
 				ft_free_2char(&parsed);
@@ -100,6 +102,7 @@ void			minishell(t_env_head *head)
 }
 //--------------------------------------
 /*
+ * tester de mettre un PATH = non et lancer /bin/ls
  *	tester avec: espace "entre"
  *	espace tab (cmd) espace tab espace (option)
  *	exit 12 et exit 12354646adsafafg

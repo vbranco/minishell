@@ -52,7 +52,7 @@ void			execute_2(char *exe, char **parsed, char **environment, int i)
 {
 	if (execve(exe, parsed, environment) == -1)
 	{
-		ft_err(parsed[i], "execve ERROR");
+		ft_err(parsed[i], ": execve ERROR");
 		exit(1);
 	}
 }
