@@ -73,6 +73,7 @@ void			execute(t_env_head *head, char **parsed, int i)
 			ft_updating_var(head, "_", exe);
 		else
 			ft_create_var(head, "_", exe);
+		printf("dans execute || exe > %s\n", exe);
 		environment = making_env(head, exe);
 		pid = fork();
 		if (pid < 0)

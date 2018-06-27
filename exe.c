@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/28 19:46:28 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/26 17:23:18 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/27 17:03:34 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -48,6 +48,7 @@ static	int			not_in_exe_dir(char **path, char **parsed, char **exe)
 			i++;
 		}
 	}
+//	printf("exe > %s || parsed %s\n", *exe, *parsed);
 	return (0);
 }
 
@@ -82,11 +83,15 @@ int					test_exe(t_env *env, char **parsed, int index, char **exe)
 		return (-1);
 	i = 0;
 	tmp = path_exist(env);
+	printf("dans test_exe| tmp > %s\n", tmp);
 	path = ft_strsplit(tmp, ':');
 	free(tmp);
 	i = not_in_exe_dir(path, parsed, exe);
 	if (i == 1)
+	{
+//		ft_free_2char(&path); ///verifier eventuelle fuite memoire
 		return (ft_teste_file_exe(exe));
+	}
 	ft_free_2char(&path);
 	return (0);
 }
