@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/06/02 10:26:07 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/05 17:56:13 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/27 19:58:44 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,6 +18,10 @@ static	int		change_dir(t_env_head *head, char **parsed, char *dir)
 	char		p[1096];
 
 	getcwd(p, 1096);
+	if (!dir)
+	{
+		return (ft_error(CD_NO_FILE, parsed, 1));
+	}
 	if (access(dir, F_OK))
 	{
 		return (ft_error(CD_NO_FILE, parsed, 1));

@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/27 18:55:50 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/27 19:58:43 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -101,7 +101,8 @@ void			minishell(t_env_head *head)
 	}
 }
 //--------------------------------------
-/*
+/* gerer cd -L et cd -P
+ * testes valgrind avec cat * | ./minishell
  * tester de mettre un PATH = non et lancer /bin/ls
  *	tester avec: espace "entre"
  *	espace tab (cmd) espace tab espace (option)
@@ -118,7 +119,7 @@ int				main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	if (!(head = ft_initialise_head()))
-		return (1);
+		return (0);
 	shell_top();
 	ft_get_env(head, env);
 	minishell(head);
