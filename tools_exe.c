@@ -28,31 +28,7 @@ int					exec_in_dir(char **parsed, int index, char **exe)
 		getcwd(pwd, 1096);
 		*exe = get_prev_dir(parsed, pwd, index);
 		*exe = ft_strjoin(*exe, &parsed[index][p]);
-//		return (ft_teste_file_exe(exe));
-		if (access(*exe, F_OK) || access(*exe, X_OK))
-		{
-			if (access(*exe, F_OK))
-			{
-				free(*exe);
-				return (-2);
-			}
-			free(*exe);
-			return (-1);
-		}
-		return (1);
-	}
-	else
-	{
-		if (!access(*parsed, F_OK))
-		{
-			if (!access(*parsed, X_OK))
-			{
-				*exe = ft_strdup(*parsed);
-				return (1);
-			}
-			else
-				return (-1);
-		}
+		return (ft_teste_file_exe(exe));
 	}
 	return (0);
 }

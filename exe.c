@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/28 19:46:28 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/27 17:03:34 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/06/27 18:55:52 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -43,28 +43,51 @@ static	int			not_in_exe_dir(char **path, char **parsed, char **exe)
 			if (inside_dir(path[i], *parsed, exe))
 			{
 				ft_free_2char(&path);
-				return (1);
+				return (ft_teste_file_exe(exe));
 			}
 			i++;
 		}
 	}
-//	printf("exe > %s || parsed %s\n", *exe, *parsed);
 	return (0);
 }
 
 int					ft_teste_file_exe(char **exe)
 {
-	if (access(*exe, F_OK) || access(*exe, X_OK))
+	struct stat		st;
+	int				i;
+
+	i = 0;
+	if (!access(*exe, F_OK))
 	{
-		if (access(*exe, F_OK))
+		if (lstat(*exe, &st) != 0)
 		{
+			ft_putendl_fd("ERROR de lstat", 2);
 			free(*exe);
 			return (-2);
 		}
-		free(*exe);
-		return (-1);
+		if (S_ISREG(st.st_mode))
+		{
+			if (!access(*exe, X_OK))
+				return (1);
+			else
+			{
+				free(*exe);
+				return (-1);
+			}
+		}
 	}
-	return (1);
+	free(*exe);
+	return (-2);
+}
+
+static	int			exe_insert_by_user(char **parsed, char **exe)
+{
+	if (*parsed[0] == '/')
+	{
+		*exe = ft_strdup(*parsed);
+		return (ft_teste_file_exe(exe));
+	}
+	return (0);
 }
 
 int					test_exe(t_env *env, char **parsed, int index, char **exe)
@@ -77,21 +100,17 @@ int					test_exe(t_env *env, char **parsed, int index, char **exe)
 //penser a gerer les PATH = NON /bin/ls
 //et les trucs du main
 	i = exec_in_dir(parsed, index, exe);
-	if (i == 1)
-		return (1);
-	else if (i == -1)
-		return (-1);
-	i = 0;
+	if (i)
+		return (i);
 	tmp = path_exist(env);
-	printf("dans test_exe| tmp > %s\n", tmp);
 	path = ft_strsplit(tmp, ':');
 	free(tmp);
 	i = not_in_exe_dir(path, parsed, exe);
-	if (i == 1)
-	{
-//		ft_free_2char(&path); ///verifier eventuelle fuite memoire
-		return (ft_teste_file_exe(exe));
-	}
+	if (i)
+		return (i);
 	ft_free_2char(&path);
+	i = exe_insert_by_user(parsed, exe);
+	if (i)
+		return (i);
 	return (0);
 }

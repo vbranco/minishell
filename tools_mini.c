@@ -69,11 +69,16 @@ void			execute(t_env_head *head, char **parsed, int i)
 	a = test_exe(head->next, parsed, i, &exe);
 	if (a > 0)
 	{
+/*		//delete
+		printf("exe valide > %s\n", exe);
+		ft_free_2char(&environment);
+		free(exe);
+		return ;
+		//---------------*/
 		if (searching_on_env(head, "_"))
 			ft_updating_var(head, "_", exe);
 		else
 			ft_create_var(head, "_", exe);
-		printf("dans execute || exe > %s\n", exe);
 		environment = making_env(head, exe);
 		pid = fork();
 		if (pid < 0)
