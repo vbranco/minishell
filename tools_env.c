@@ -42,7 +42,7 @@ void			ft_updating_var(t_env_head *head, char *var, char *dir)
 		env = env->next;
 	}
 	free(env->data);
-	env->data = ft_strdup(dir); 
+	env->data = ft_strdup(dir);
 }
 
 void			ft_create_var(t_env_head *head, char *var, char *data)

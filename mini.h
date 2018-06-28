@@ -58,7 +58,6 @@ typedef struct		s_pars_head
 	struct s_pars	*next;
 }					t_pars_head;
 
-
 /*
 **	TOOLS_LST_ENV.c
 */
@@ -126,14 +125,13 @@ int				ft_teste_file_exe(char **exe);
 char			**ft_parsed(t_env_head *head, char *line);
 void			ft_looking_for_special(char *s, int *i);
 
-
 /*
 **	TOOLS.c
 */
 char			*searching_on_env(t_env_head *head, char *looking);
 int				ft_error(char *error_message, char **parsed, int index);
 int				ft_count_args_shell(char **parsed);
-void			ft_get_index_flag(char **parsed, int *, int *flag);
+void			ft_get_index_flag(char **parsed, int *i, int *flag);
 
 /*
 **	TOOLS_ENV.c
@@ -170,8 +168,6 @@ int				ft_count_p(char *s);
 **	TOOLS_PARSING.c
 */
 void			ft_create_parse_lst(t_env_head *env, t_pars_head *h, char *s);
-
-
 
 /*
 **	HEAD_PROMPT.c

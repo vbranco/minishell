@@ -13,9 +13,9 @@
 
 #include "mini.h"
 
-t_env		*ft_initialise(void)
+t_env			*ft_initialise(void)
 {
-	t_env	*env;
+	t_env		*env;
 
 	env = NULL;
 	if (!(env = (t_env*)malloc(sizeof(t_env))))
@@ -36,9 +36,9 @@ t_env_head		*ft_initialise_head(void)
 	return (head);
 }
 
-void		ft_add(t_env_head *head, t_env *add)
+void			ft_add(t_env_head *head, t_env *add)
 {
-	t_env	*tmp;
+	t_env		*tmp;
 
 	tmp = head->next;
 	if (tmp)
@@ -55,9 +55,9 @@ void		ft_add(t_env_head *head, t_env *add)
 		head->next = add;
 }
 
-void		ft_dell(t_env_head **head)
+void			ft_dell(t_env_head **head)
 {
-	t_env	*tmp;
+	t_env		*tmp;
 	t_env	*s;
 
 	s = (*head)->next;
@@ -74,11 +74,11 @@ void		ft_dell(t_env_head **head)
 	head = NULL;
 }
 
-void		ft_get_env(t_env_head *head, char **env)
+void			ft_get_env(t_env_head *head, char **env)
 {
-	int		i;
-	char	*var;
-	char	*data;
+	int			i;
+	char		*var;
+	char		*data;
 
 	i = 0;
 	if (*env == NULL)

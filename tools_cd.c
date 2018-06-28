@@ -27,12 +27,6 @@ char		*get_dir_from_env(t_env *env, char *looking, char **error_message)
 			dir = ft_strdup(tmp->data);
 		tmp = tmp->next;
 	}
-/*	if (!dir)//avec env -i la var HOME n'existe pas 
-	{
-		getcwd(pwd, 1096);
-		dir = ft_strdup(pwd);
-	}
-*/	
 	if (dir == NULL)
 	{
 		if (!ft_strcmp(looking, "OLDPWD"))
@@ -45,11 +39,19 @@ char		*get_dir_from_env(t_env *env, char *looking, char **error_message)
 	return (dir);
 }
 
-char	*get_stat(char **parsed, int i, int flag, char *pwd)
+static	void	ft_doing_cat(char **tmp, char *s, char *s2)
+{
+	if (s)
+		ft_strcat(*tmp, s);
+	ft_strcat(*tmp, "/");
+	ft_strcat(*tmp, s2);
+}
+
+char			*get_stat(char **parsed, int i, int flag, char *pwd)
 {
 	struct stat	st;
 	char		*dir;
-	char		tmp[1000];
+	char		*tmp;
 
 	if (flag < 0)
 		return (NULL);
@@ -57,28 +59,24 @@ char	*get_stat(char **parsed, int i, int flag, char *pwd)
 		return (ft_strdup(parsed[i]));
 	if (S_ISLNK(st.st_mode) && (!ft_strcmp(parsed[flag], "-L") || flag == 0))
 	{
-		ft_bzero(tmp, 1000);
+		tmp = ft_memalloc(1000);
 		if (!ft_count_signes(parsed[i], '.'))
-		{
-			ft_strcat(tmp, pwd);
-			ft_strcat(tmp, "/");
-			ft_strcat(tmp, parsed[i]);
-		}
+			ft_doing_cat(&tmp, pwd, parsed[i]);
 		else
 		{
-			ft_strcat(tmp, "/");
-			ft_strcat(tmp, parsed[i]);
+			ft_doing_cat(&tmp, NULL, parsed[i]);
 			dir = get_prev_dir(parsed, pwd, i);
 			dir = ft_realloc(dir, tmp);
 		}
 		dir = ft_strdup(tmp);
+		free(tmp);
 	}
 	else
 		dir = ft_strdup(parsed[i]);
 	return (dir);
 }
 
-int		looking_stat(char *dir)
+int				looking_stat(char *dir)
 {
 	struct stat	st;
 

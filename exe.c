@@ -22,7 +22,7 @@ static	int			try_exe_without_path(char *path, char **exe)
 	tmp = ft_strsub(path, 0, slach);
 	if (inside_dir(tmp, path, exe))
 	{
-		free (tmp);
+		free(tmp);
 		return (1);
 	}
 	free(tmp);
@@ -96,9 +96,6 @@ int					test_exe(t_env *env, char **parsed, int index, char **exe)
 	char			*tmp;
 	int				i;
 
-//---------
-//penser a gerer les PATH = NON /bin/ls
-//et les trucs du main
 	i = exec_in_dir(parsed, index, exe);
 	if (i)
 		return (i);

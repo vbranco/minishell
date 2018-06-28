@@ -38,11 +38,9 @@ static	char	*ft_looking_for_var(t_env_head *start, char *s)
 	char		*tmp;
 	char		*swap;
 	char		*search;
-//---tester plein de trucs avec ca || mis a jour 25/06
+
 	if (!ft_strcmp(s, "$"))
 		return (ft_strdup("$"));
-//---tester plein de trucs avec ca || mis a jour 25/06 ^^^
-
 	tmp = ft_get_before(s, &i);
 	while (s[i])
 	{
@@ -63,7 +61,7 @@ static	char	*ft_looking_for_var(t_env_head *start, char *s)
 	}
 	return (tmp);
 }
-//--------------------
+
 static	char	*ft_looking_for_home(t_env_head *start, char *s)
 {
 	char		*rest;

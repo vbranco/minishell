@@ -54,10 +54,7 @@ static	int		ft_path(char *s, char **dir)
 		}
 		ft_strcat(tmp, "/");
 		ft_strcat(tmp, (s + i + 1));
-		if (*dir == NULL)
-			*dir = ft_strdup(tmp);
-		else
-			*dir = ft_realloc(*dir, tmp);
+		(*dir == NULL) ? *dir = ft_strdup(tmp) : (*dir = ft_realloc(*dir, tmp));
 	}
 	return (0);
 }
@@ -102,7 +99,7 @@ char			*get_prev_dir(char **parsed, char *pwd, int index)
 		return (pwd);
 	i--;
 	if (i >= z)
-		return (ft_strdup("/"));//attention fuite de memoire
+		return (ft_strdup("/"));
 	else
 		dir = ft_new_dir(parsed[index], pwd, i);
 	return (dir);

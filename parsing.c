@@ -13,32 +13,6 @@
 
 #include "mini.h"
 
-//--supp
-static	void	ft_p(t_pars_head *head)
-{
-	t_pars		*tmp;
-
-	tmp = head->next;
-	while (tmp)
-	{
-		ft_printf("dans ft_p get>> ||%s||\n", tmp->get);
-		tmp = tmp->next;
-	}
-}
-//---
-//--a supp
-void			ft_pi(char **p)
-{
-	int			i = 0;
-
-	while (p[i])
-	{
-		printf("dans ft_pi>>%s\n", p[i]);
-		i++;
-	}
-}
-//----------------------------------------------------------------
-
 static	int		ft_count_lst_elem(t_pars_head *head)
 {
 	int			i;
@@ -85,8 +59,7 @@ static	char	**ft_create_pars(t_pars_head *head)
 	return (ret);
 }
 
-//Travailler pour resoudre "$$" et "$$LESS"
-void	ft_looking_for_special(char *s, int *i)
+void			ft_looking_for_special(char *s, int *i)
 {
 	int			a;
 
@@ -98,7 +71,7 @@ void	ft_looking_for_special(char *s, int *i)
 			if (!ft_isalpha(s[a + 1]))
 				a += 2;
 			else
-				break;
+				break ;
 		}
 		else
 			break ;

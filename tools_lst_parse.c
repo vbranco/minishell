@@ -13,9 +13,9 @@
 
 #include "mini.h"
 
-t_pars_head			*ft_initialise_pars_head(void)
+t_pars_head		*ft_initialise_pars_head(void)
 {
-	t_pars_head		*p;
+	t_pars_head	*p;
 
 	p = NULL;
 	if (!(p = (t_pars_head*)malloc(sizeof(t_pars_head))))
@@ -28,7 +28,7 @@ void			ft_free_pars(t_pars_head **head)
 {
 	t_pars		*tmp;
 	t_pars		*s;
-	
+
 	s = (*head)->next;
 	while (s)
 	{

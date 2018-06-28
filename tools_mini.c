@@ -13,7 +13,7 @@
 
 #include "mini.h"
 
-int		ft_count_nb_env(t_env *lst)
+int				ft_count_nb_env(t_env *lst)
 {
 	int			i;
 
@@ -26,7 +26,7 @@ int		ft_count_nb_env(t_env *lst)
 	return (i + 1);
 }
 
-char	**making_env(t_env_head *head, char *exe)
+char			**making_env(t_env_head *head, char *exe)
 {
 	char		**envi;
 	char		tmp[1096];
@@ -52,13 +52,13 @@ char	**making_env(t_env_head *head, char *exe)
 		lst = lst->next;
 	}
 	envi[i] = NULL;
-	return	(envi);
+	return (envi);
 }
 
 static	void	ft_err(char *s, char *err)
 {
-		ft_putstr_fd(s, 2);
-		ft_putendl_fd(err, 2);
+	ft_putstr_fd(s, 2);
+	ft_putendl_fd(err, 2);
 }
 
 void			execute_2(char *exe, char **parsed, char **environment, int i)
@@ -82,24 +82,13 @@ void			execute(t_env_head *head, char **parsed, int i)
 	a = test_exe(head->next, parsed, i, &exe);
 	if (a > 0)
 	{
-/*		//delete
-		printf("exe valide > %s\n", exe);
-		ft_free_2char(&environment);
-		free(exe);
-		return ;
-		//---------------*/
-		if (searching_on_env(head, "_"))
-			ft_updating_var(head, "_", exe);
-		else
+		(searching_on_env(head, "_")) ? ft_updating_var(head, "_", exe) :
 			ft_create_var(head, "_", exe);
 		environment = making_env(head, exe);
 		pid = fork();
 		if (pid < 0)
 			ft_putendl_fd("ERROR FORK()", 2);
-		if (pid == 0)
-			execute_2(exe, parsed, environment, i);
-		else
-			wait(&pid);
+		(pid == 0) ? execute_2(exe, parsed, environment, i) : wait(&pid);
 		ft_free_2char(&environment);
 		free(exe);
 	}

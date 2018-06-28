@@ -91,11 +91,9 @@ int					inside_dir(char *path_dir, char *parsed, char **ret)
 	while ((pdir = readdir(dir)) != NULL)
 	{
 		path = making_path(path_dir, pdir->d_name, 1);
-		if (parsed[0] != '/')
-			exe = making_path(path_dir, parsed, 1);
-		else
-			exe = making_path(path_dir, parsed, 0);
-		if (ft_strcmp (path, exe) == 0)
+		(parsed[0] != '/') ? (exe = making_path(path_dir, parsed, 1)) :
+		(exe = making_path(path_dir, parsed, 0));
+		if (ft_strcmp(path, exe) == 0)
 		{
 			*ret = ft_strdup(exe);
 			closedir(dir);

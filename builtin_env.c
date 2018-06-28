@@ -13,9 +13,9 @@
 
 #include "mini.h"
 
-int			ft_print_env(t_env_head *head)
+int				ft_print_env(t_env_head *head)
 {
-	t_env	*s;
+	t_env		*s;
 
 	s = head->next;
 	if (s)
@@ -87,7 +87,7 @@ int				environment(t_env_head *head, char **parsed)
 {
 	int			i;
 	t_env_head	*exe_head;
-	
+
 	i = 1;
 	if (parsed[i] == NULL)
 		ft_print_env(head);

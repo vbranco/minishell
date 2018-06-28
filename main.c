@@ -13,21 +13,6 @@
 
 #include "mini.h"
 
-//--supp
-void			print(char **env)
-{
-	int			i;
-
-	i = 0;
-	ft_printf("\n\n");
-	while (env[i])
-	{
-		ft_printf("env >> %s\n", env[i]);
-		i++;
-	}
-}
-//-----
-
 int		built(t_env_head *head, char **parsed)
 {
 	if (parsed == NULL)

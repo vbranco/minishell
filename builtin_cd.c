@@ -38,7 +38,7 @@ static	int		change_dir(t_env_head *head, char **parsed, char *dir)
 	return (0);
 }
 
-char			*ft_get_dir(t_env *env, char **parsed, char *pwd, char **error_message)
+char			*ft_get_dir(t_env *env, char **parsed, char *pwd, char **err)
 {
 	char		*dir;
 	int			i;
@@ -47,15 +47,14 @@ char			*ft_get_dir(t_env *env, char **parsed, char *pwd, char **error_message)
 	flag = 0;
 	i = 0;
 	if (parsed[1] == NULL || (ft_strcmp(parsed[1], "~") == 0))
-		return (dir = get_dir_from_env(env, "HOME", error_message));
+		return (dir = get_dir_from_env(env, "HOME", err));
 	else if (ft_strcmp(parsed[1], "-") == 0)
-		return (dir = get_dir_from_env(env, "OLDPWD", error_message));
+		return (dir = get_dir_from_env(env, "OLDPWD", err));
 	else
 	{
 		ft_get_index_flag(parsed, &i, &flag);
 		if (flag == -1)
 			return (NULL);
-//		return(dir = get_stat(parsed, i, flag, pwd));//a voir comment gerer pour recuperer le bon path en cas de cd -L sur lien symbolique
 		return (dir = ft_strdup(parsed[i]));
 	}
 }

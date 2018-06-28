@@ -16,6 +16,7 @@
 char			*searching_on_env(t_env_head *head, char *looking)
 {
 	t_env		*tmp;
+
 	if (head->next == NULL || looking == NULL)
 		return (NULL);
 	tmp = head->next;
@@ -30,7 +31,6 @@ char			*searching_on_env(t_env_head *head, char *looking)
 
 int				ft_error(char *error_message, char **parsed, int index)
 {
-
 	ft_putstr_fd(error_message, 2);
 	if (parsed != NULL)
 		ft_putendl_fd(parsed[index], 2);

@@ -20,7 +20,7 @@ static void		print_env(t_env_head *head, char *s)
 	t_env		*env;
 
 	env = head->next;
-	try = ft_strdup(s+1);
+	try = ft_strdup(s + 1);
 	tmp = env;
 	while (tmp)
 	{
@@ -51,10 +51,7 @@ int				echo(t_env_head *head, char **parsed)
 		i++;
 	while (parsed[i])
 	{
-//		if (parsed[i][0] == '$')
-//			print_env(head, parsed[i]);
-//		else
-			ft_printf("%s", parsed[i]);
+		ft_printf("%s", parsed[i]);
 		i++;
 		if (parsed[i])
 			ft_printf(" ");
