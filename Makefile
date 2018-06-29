@@ -31,7 +31,7 @@ LIB_LNK		=	-L $(L_FT) -l ft
 
 LIB_INC		=	-I $(L_FT)/libft.h
 
-LAGS		=	-Wall -Wextra -Werror -g #penser a enlever le -g
+LAGS		=	-Wall -Wextra -Werror #-g #penser a enlever le -g
 
 .PHONY: all clean fclean re
 
@@ -40,24 +40,24 @@ all: $(NAME)
 clean:
 		@echo "\033[31m Cleanning minishell"
 		@rm -rf build/
-#		@$(MAKE) -C $(L_FT) clean
+		@$(MAKE) -C $(L_FT) clean
 
 fclean: clean
 	    @echo "\033[31m FCleanninf minishell"
 		@rm -f $(NAME)
-#		@$(MAKE) -C $(L_FT) fclean
+		@$(MAKE) -C $(L_FT) fclean
 
-re:		fclean all#enlever
+re:	#	fclean all#enlever
 		@echo "\033[32m RE minishell"
-#		@$(MAKE) fclean
-#		@$(MAKE) all
+		@$(MAKE) fclean
+		@$(MAKE) all
 
 build:
 	    @echo "\033[32m Making minishell"
 		@mkdir build/
 
 $(NAME): $(OBJECTS)
-#		@$(MAKE) -C $(L_FT)
+		@$(MAKE) -C $(L_FT)
 		@gcc $(FLAGS) -I  $(HEADER) $(SOURCES) $(LIB) -o $@ #-g
 		@echo " Ready to play"
 
