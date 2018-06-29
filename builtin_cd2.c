@@ -90,7 +90,9 @@ char			*get_prev_dir(char **parsed, char *pwd, int index)
 	int			z;
 	int			a;
 
-	i = ft_count_signes(parsed[index], '.');
+	i = 1;
+	if (!(parsed[index][0] == '.' && parsed[index][1] == '/'))
+		i = ft_count_signes(parsed[index], '.');
 	z = ft_count_signes(pwd, '/');
 	dir = NULL;
 	if (i >= 7)
