@@ -31,7 +31,7 @@ LIB_LNK		=	-L $(L_FT) -l ft
 
 LIB_INC		=	-I $(L_FT)/libft.h
 
-LAGS		=	-Wall -Wextra -Werror #-g #penser a enlever le -g
+LAGS		=	-Wall -Wextra -Werror
 
 .PHONY: all clean fclean re
 
@@ -47,7 +47,7 @@ fclean: clean
 		@rm -f $(NAME)
 		@$(MAKE) -C $(L_FT) fclean
 
-re:#		fclean all#enlever
+re:	
 		@echo "\033[32m RE minishell"
 		@$(MAKE) fclean
 		@$(MAKE) all

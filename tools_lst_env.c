@@ -58,7 +58,7 @@ void			ft_add(t_env_head *head, t_env *add)
 void			ft_dell(t_env_head **head)
 {
 	t_env		*tmp;
-	t_env	*s;
+	t_env		*s;
 
 	s = (*head)->next;
 	while (s)
