@@ -43,7 +43,6 @@ clean:
 		@$(MAKE) -C $(L_FT) clean
 
 fclean: clean
-	    @echo "\033[31m FCleanninf minishell"
 		@rm -f $(NAME)
 		@$(MAKE) -C $(L_FT) fclean
 

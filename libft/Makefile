@@ -39,7 +39,7 @@ PFOBJ 	= ft_printf/build/*
 
 CFLAGS 	= -Wall -Wextra -Werror
 
-.PHONY: all clean fclean re build message
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
@@ -60,8 +60,7 @@ clean:
 	@/bin/rm -rf build/
 	@echo "\033[31m Cleanning libft"
 
-fclean: clean
-	@echo "\033[31m FCleanning libft"
+fclean:
 	@$(MAKE) -C $(PF) fclean
 	@/bin/rm -rf $(NAME)
 
