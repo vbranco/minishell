@@ -6,87 +6,19 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/06/27 20:00:39 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/27 20:00:41 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/07/16 14:55:11 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "mini.h"
 
-static	char	*ft_get_before(char *s, int *i)
+static	char	*ft_is_dollar(char *search)
 {
-	char		*tmp;
-	int			a;
-
-	a = 0;
-	*i = 0;
-	tmp = NULL;
-	while (s[a] && s[a] != '$')
-		a++;
-	if (a > 0)
-	{
-		tmp = ft_strsub(s, 0, a);
-		*i = a;
-	}
-	return (tmp);
-}
-
-static	char	*ft_looking_for_var(t_env_head *start, char *s)
-{
-	int			i;
-	int			a;
-	char		*tmp;
-	char		*swap;
-	char		*search;
-
-	if (!ft_strcmp(s, "$"))
+	if (!ft_strcmp(search, "$"))
 		return (ft_strdup("$"));
-	tmp = ft_get_before(s, &i);
-	while (s[i])
-	{
-		ft_looking_for_special(s, &i);
-		a = i;
-		(s[i] == '$') ? i++ : 0;
-		while (s[i] && s[i] != '$')
-			i++;
-		if (i > a)
-		{
-			search = ft_strsub(s, a, i - a);
-			swap = searching_on_env(start, search + 1);
-			(!swap && search && ft_isalpha(search[0])) ? 
-			tmp = ft_realloc(tmp, search) : 0;
-			free(search);
-			(swap) ? tmp = ft_realloc(tmp, swap) : 0;
-		}
-	}
-	return (tmp);
-}
-
-static	char	*ft_looking_for_home(t_env_head *start, char *s)
-{
-	char		*rest;
-	char		*swap;
-	char		*tmp;
-	char		*doll;
-
-	swap = searching_on_env(start, "HOME");
-	if (swap)
-	{
-		tmp = ft_strdup(swap);
-		rest = ft_strsub(s, 1, ft_strlen(s) - 1);
-		if (ft_strchr(rest, '$'))
-		{
-			doll = ft_looking_for_var(start, rest);
-			free(rest);
-			rest = ft_strdup(doll);
-			free(doll);
-		}
-	}
 	else
 		return (NULL);
-	tmp = ft_realloc(tmp, rest);
-	free(rest);
-	return (tmp);
 }
 
 static	void	ft_update_parse(t_env_head *start, t_pars_head *head)
@@ -110,14 +42,15 @@ static	void	ft_update_parse(t_env_head *start, t_pars_head *head)
 		{
 			rest = ft_strdup(tmp->get);
 			free(tmp->get);
-			tmp->get = ft_looking_for_var(start, rest);
+			tmp->get = ft_is_dollar(rest);
+			(!tmp->get) ? tmp->get = ft_looking_for_var(start, rest) : 0;
 			free(rest);
 		}
 		tmp = tmp->next;
 	}
 }
 
-void	ft_create_parse_lst(t_env_head *env, t_pars_head *head, char *s)
+void			ft_create_parse_lst(t_env_head *env, t_pars_head *head, char *s)
 {
 	int			i;
 	int			start;

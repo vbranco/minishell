@@ -6,14 +6,15 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/06/27 20:00:16 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/27 20:00:17 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/07/16 14:14:41 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "mini.h"
 
-char		*get_dir_from_env(t_env *env, char *looking, char **error_message)
+char			*get_dir_from_env(t_env *env, char *looking,
+		char **error_message)
 {
 	t_env		*tmp;
 	char		*dir;

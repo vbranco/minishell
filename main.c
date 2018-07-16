@@ -6,14 +6,14 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/05/17 18:06:11 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/27 19:58:43 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/07/16 14:13:13 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "mini.h"
 
-int		built(t_env_head *head, char **parsed)
+int				built(t_env_head *head, char **parsed)
 {
 	if (parsed == NULL)
 		return (1);
@@ -85,16 +85,6 @@ void			minishell(t_env_head *head)
 		ft_free_2char(&parsed);
 	}
 }
-//--------------------------------------
-/* gerer cd -L et cd -P
- * testes valgrind avec cat * | ./minishell
- * tester de mettre un PATH = non et lancer /bin/ls
- *	tester avec: espace "entre"
- *	espace tab (cmd) espace tab espace (option)
- *	exit 12 et exit 12354646adsafafg
- *	chmod -x ./minishell et faire un ./minishell
- *	penser a enlever les droits sur PATH et tester pour voir is Permission denied
-*/
 
 int				main(int ac, char **av, char **env)
 {

@@ -6,7 +6,7 @@
 #    By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/03/07 17:08:49 by vbranco      #+#   ##    ##    #+#        #
-#    Updated: 2018/06/27 19:40:15 by vbranco     ###    #+. /#+    ###.fr      #
+#    Updated: 2018/07/16 15:00:21 by vbranco     ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -15,9 +15,11 @@ NAME		=	minishell
 
 HEADER		=	mini.h
 
-FILENAMES	=	main.c tools_lst_env.c builtins.c builtin_cd.c builtin_cd2.c builtin_env.c builtin_setenv.c builtin_unsetenv.c parsing.c\
-	exe.c tools.c tools_env.c tools_lst_parse.c head_prompt.c tools_mini.c \
-	tools_cd.c tools_exe.c tools_parsing.c
+FILENAMES	=	main.c tools_lst_env.c builtins.c builtin_cd.c builtin_cd2.c \
+				builtin_env.c builtin_setenv.c builtin_unsetenv.c parsing.c \
+				exe.c tools.c tools_env.c tools_lst_parse.c head_prompt.c \
+				tools_mini.c tools_cd.c tools_exe.c tools_parsing.c \
+				tools_parsing_2.c
 
 SOURCES		=	$(addprefix ./, $(FILENAMES))
 
@@ -57,7 +59,7 @@ build:
 
 $(NAME): $(OBJECTS)
 		@$(MAKE) -C $(L_FT)
-		@gcc $(FLAGS) -I  $(HEADER) $(SOURCES) $(LIB) -o $@ #-g
+		@gcc $(FLAGS) -I  $(HEADER) $(SOURCES) $(LIB) -o $@
 		@echo " Ready to play"
 
 build/%.o: ./%.c | build

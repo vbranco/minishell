@@ -6,7 +6,7 @@
 /*   By: vbranco <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/06/04 17:17:57 by vbranco      #+#   ##    ##    #+#       */
-/*   Updated: 2018/06/27 19:58:46 by vbranco     ###    #+. /#+    ###.fr     */
+/*   Updated: 2018/07/16 14:26:33 by vbranco     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -29,6 +29,14 @@ int				ft_count_signes(char *str, char c)
 		i++;
 	}
 	return (a);
+}
+
+static	void	ft_path_2(char **dir, char *tmp)
+{
+	if (*dir == NULL)
+		*dir = ft_strdup(tmp);
+	else
+		*dir = ft_realloc(*dir, tmp);
 }
 
 static	int		ft_path(char *s, char **dir)
@@ -54,7 +62,7 @@ static	int		ft_path(char *s, char **dir)
 		}
 		ft_strcat(tmp, "/");
 		ft_strcat(tmp, (s + i + 1));
-		(*dir == NULL) ? *dir = ft_strdup(tmp) : (*dir = ft_realloc(*dir, tmp));
+		ft_path_2(dir, tmp);
 	}
 	return (0);
 }
